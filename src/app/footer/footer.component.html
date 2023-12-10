@@ -1,0 +1,39 @@
+<div class="container-fluid foot">
+  <div class="row justify-content-center form-message" *ngIf="isUser">
+    <div class="col-12">
+      <h1>Let me know what's on your mind</h1>
+      <form action="">
+        <div class="row justify-content-center">
+          <div class="col-4">
+            <label class="form-label" for="firstName">First Name</label>
+            <input type="text" id="firstName" class="form-control" />
+          </div>
+          <div class="col-4">
+            <label class="form-label" for="lastName">Last Name</label>
+            <input type="text" id="lastName" class="form-control" />
+          </div>
+        </div>
+        <div class="row justify-content-center">
+          <div class="col-4">
+            <label class="form-label" for="email">Email</label>
+            <input type="text" id="email" class="form-control" />
+          </div>
+          <div class="col-4">
+            <label class="form-label" for="message">Let us a message</label>
+            <textarea
+              type="text"
+              id="message"
+              class="form-control"
+              rows="1"
+            ></textarea>
+          </div>
+        </div>
+      </form>
+    </div>
+  </div>
+  <div class="row">
+    <div class="col-12 footer">
+      <p>© 2035 by Lovely Little Things. Powered and secured by Hi there!</p>
+    </div>
+  </div>
+</div>

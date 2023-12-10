@@ -1,0 +1,158 @@
+<div class="container-fluid">
+  <div class="slider">
+    <div class="container">
+      <app-header></app-header>
+      <div class="row">
+        <div class="col-12">
+          <h1 class="title">Lovely little things</h1>
+        </div>
+      </div>
+    </div>
+  </div>
+
+  <div class="container">
+    <div class="row category">
+      <div class="col-4 wrap-box">
+        <img
+          src="https://static.wixstatic.com/media/37e2cda648dc4c508982e79d3432d016.jpeg/v1/fill/w_1225,h_690,fp_0.50_0.50,q_90,enc_auto/37e2cda648dc4c508982e79d3432d016.jpeg"
+          alt=""
+          class="box-img"
+        />
+        <div class="box box-1">
+          <a routerLink="/blog/lifestyle">
+            <div class="box-title">Lifestyle</div>
+            <div class="box-desc">Lifestyle from little things</div>
+          </a>
+        </div>
+      </div>
+      <div class="col-4 wrap-box">
+        <img
+          src="https://static.wixstatic.com/media/06874bade3274744bc70b6dd712869ab.jpg/v1/fill/w_1225,h_690,fp_0.50_0.50,q_90,enc_auto/06874bade3274744bc70b6dd712869ab.jpg"
+          class="box-img"
+          alt=""
+        />
+        <div class="box box-2">
+          <a routerLink="/blog/family">
+            <div class="box-title">Family</div>
+            <div class="box-desc">Songs for Sweet Dreams</div>
+          </a>
+        </div>
+      </div>
+      <div class="col-4 wrap-box">
+        <img
+          src="https://static.wixstatic.com/media/b4dde82e1c304a998ff61aec2774cea4.jpg/v1/fill/w_799,h_540,fp_0.50_0.50,lg_1,q_90,enc_auto/b4dde82e1c304a998ff61aec2774cea4.jpg"
+          class="box-img"
+          alt=""
+        />
+        <div class="box box-3">
+          <a routerLink="/blog/food">
+          <div class="box-title">Food</div>
+          <div class="box-desc">Fresh from Your Garden</div>
+          </a>
+        </div>
+      </div>
+    </div>
+  </div>
+  <div class="container posts">
+    <ul class="list-post">
+      <li class="post-item" *ngFor="let post of posts">
+        <div>
+          <img class="image" [src]="post.image[0].url" [alt]="post.title" />
+          <div class="author">
+            <img
+              src="https://t4.ftcdn.net/jpg/05/49/98/39/360_F_549983970_bRCkYfk0P6PP5fKbMhZMIb07mCJ6esXL.jpg"
+              alt="avatar"
+            />
+            <div class="info">
+              <h4>{{ post.userId.username }}</h4>
+              <span>{{ formatDate(post.createdAt) }}</span>
+            </div>
+          </div>
+          <h3 class="title-post my-4" (click)="onDetail(post._id, post.categoryId._id)">{{ post.title }}</h3>
+          <div class="description">{{ post.desc }}</div>
+        </div>
+        <div class="inline"></div>
+        <div class="footer-post">
+          <div class="footer-post__first">
+            <div>
+              <i class="fa-regular fa-eye"></i>
+              <span>2</span>
+            </div>
+            <div>
+              <i class="fa-regular fa-message"></i>
+              <span>6</span>
+            </div>
+          </div>
+          <div class="footer-post__last">
+            <div>
+              <i class="fa-regular fa-heart"></i>
+              <span>2</span>
+            </div>
+          </div>
+        </div>
+      </li>
+      <nav aria-label="Page navigation">
+        <ul class="pagination navigation-post">
+          <li class="page-item">
+            <button
+              class="btn btn-primary"
+              (click)="onPrevPage()"
+              *ngIf="prevPage"
+            >
+              Previous
+            </button>
+          </li>
+          <li class="page-item">
+            <span class="page-link" style="margin: 0 6px">{{ currPage }}</span>
+          </li>
+          <li class="page-item">
+            <button
+              class="btn btn-primary"
+              (click)="onNextPage()"
+              *ngIf="nextPage"
+            >
+              Next
+            </button>
+          </li>
+        </ul>
+      </nav>
+    </ul>
+    <div class="information">
+      <h2>Never Miss a New Post.</h2>
+      <div class="slogan">
+        “Do you have a design in mind for your blog? Whether you prefer a trendy
+        postcard look or you’re going for a more editorial style blog - there’s
+        a stunning layout for everyone.”
+      </div>
+      <div class="">
+        <div class="mt-2">
+          Let create post click
+          <a routerLink="/manage-blog">Here</a>
+        </div>
+        <div class="action-info">
+          If you are not already
+          <button class="btn btn-primary ml-2" (click)="onAuth()">
+            Log in / Sign up
+          </button>
+        </div>
+      </div>
+      <div class="inline"></div>
+      <div class="sociel">
+        <i class="fa-brands fa-facebook"></i>
+        <i class="fa-brands fa-linkedin"></i>
+        <i class="fa-brands fa-youtube"></i>
+        <i class="fa-brands fa-skype"></i>
+      </div>
+      <h1 class="about-us">ABOUT US</h1>
+      <div class="text-center">
+        <img
+          src="https://static.parastorage.com/services/instagram-cdn/1.691.0/assets/ig-templates-accounts/Editor/Personal%20Blog/02.jpg"
+          alt=""
+          style="width: 300px"
+        />
+      </div>
+    </div>
+  </div>
+
+  <app-footer></app-footer>
+</div>

@@ -1,0 +1,47 @@
+<app-header></app-header>
+<div class="container">
+  <div class="row account">
+    <div class="col-4">
+      <div class="bg-white w-[35%] px-5 pt-3 pb-48 rounded-md">
+        <div class="image">
+          <img
+            src="../../assets/images/37e2cda648dc4c508982e79d3432d016.webp"
+            alt="user"
+            style="width: 200px"
+          />
+          <h3 class="username">
+           {{user.username}}
+          </h3>
+        </div>
+        <div class="inline"></div>
+        <div>
+          <ul class="list-nav">
+            <a
+            >
+              <li class="cursor-pointer">
+                <i class="fa-regular fa-file-lines  mr-2 text-[19px] text-[#0271dd]"></i>
+                Blogs
+              </li>
+            </a>
+            <li class="cursor-pointer" routerLink="/manage-blog">
+              <i class="fa-regular fa-bell  mr-2 text-[19px] text-primary-color"></i>
+              Create Blog
+            </li>
+            <li class="cursor-pointer">
+              <i class="fa-regular fa-bell  mr-2 text-[19px] text-primary-color"></i>
+              Notification
+            </li>
+            <li class="cursor-pointer" (click)="onLogout()">
+              <i class="fa-solid fa-right-from-bracket"></i>
+              Logout
+            </li>
+          </ul>
+        </div>
+      </div>
+    </div>
+    <div class="col-8">
+      <app-my-blogs [user]="user"></app-my-blogs>
+    </div>
+  </div>
+</div>
+<app-footer></app-footer>

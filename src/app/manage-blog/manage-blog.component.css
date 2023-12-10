@@ -1,0 +1,13 @@
+.form-content {
+  margin: 80px auto;
+  width : 800px;
+}
+
+.title {
+  margin: 60px 0;
+}
+
+.error {
+  color:brown;
+  font-size: 12px;
+}

@@ -1,0 +1,47 @@
+﻿<?xml version="1.0" encoding="utf-8"?>
+<ROOT>
+  <Columms>
+    <Columm serial="0" value="ip" visible="True" width="1" canUserSort="True" lang="column_ip" />
+    <Columm serial="1" value="status" visible="True" width="1" canUserSort="True" lang="column_status" />
+    <Columm serial="2" value="mac" visible="True" width="1" canUserSort="True" lang="column_mac" />
+    <Columm serial="3" value="version" visible="True" width="1" canUserSort="True" lang="column_version" />
+    <Columm serial="4" value="rtpow" visible="True" width="1" canUserSort="True" lang="column_rtpow" />
+    <Columm serial="5" value="avgpow" visible="True" width="1" canUserSort="True" lang="column_avgpow" />
+    <Columm serial="6" value="runtime" visible="True" width="1" canUserSort="True" lang="column_runtime" />
+    <Columm serial="7" value="pool1" visible="True" width="1" canUserSort="True" lang="column_pool1" />
+    <Columm serial="8" value="miner1" visible="True" width="1" canUserSort="True" lang="column_miner1" />
+    <Columm serial="9" value="pool2" visible="True" width="1" canUserSort="True" lang="column_pool2" />
+    <Columm serial="10" value="miner2" visible="True" width="1" canUserSort="True" lang="column_miner2" />
+    <Columm serial="11" value="pool3" visible="True" width="1" canUserSort="True" lang="column_pool3" />
+    <Columm serial="12" value="miner3" visible="True" width="1" canUserSort="True" lang="column_miner3" />
+    <Columm serial="13" value="firmver" visible="True" width="1" canUserSort="True" lang="column_firmver" />
+    <Columm serial="14" value="fans" visible="True" width="1" canUserSort="True" lang="column_fans" />
+    <Columm serial="15" value="fanspeed" visible="True" width="1" canUserSort="True" lang="column_fanspeed" />
+  </Columms>
+  <PoolList>
+    <Pool coin="kas" pool1="eu1.kaspa-pool.org:4444" pool2="eu1.kaspa-pool.org:4444" pool3="eu1.kaspa-pool.org:4444" worker1="iceriver" worker2="iceriver2" worker3="iceriver3" pwd1="123" pwd2="123" pwd3="123" />
+  </PoolList>
+  <AutoMonitor interval="5" />
+  <IPSectorNum value="2" />
+  <language value="zh" />
+  <scanningNum value="1" />
+  <TypeList>
+    <Type name="KS" short_name="m1" coin="kas" enable="True" hashrate="50GH" min_fan_num="10" min_fan_speed="300-700" min_temp_num="3" max_temp="125" temp_diff="30" min_chain_num="3" min_chip_num="10" hw="0.0003" />
+  </TypeList>
+  <AlarmColumns>
+    <AlarmColumn name="hashrate" enable="True" />
+    <AlarmColumn name="min_fan_num" enable="True" />
+    <AlarmColumn name="min_fan_speed" enable="True" />
+    <AlarmColumn name="min_temp_num" enable="True" />
+    <AlarmColumn name="max_temp" enable="True" />
+    <AlarmColumn name="temp_diff" enable="True" />
+    <AlarmColumn name="min_chain_num" enable="True" />
+    <AlarmColumn name="min_chip_num" enable="True" />
+    <AlarmColumn name="hw" enable="True" />
+  </AlarmColumns>
+  <IPList>
+    <IP block="192.168.1" start="1" end="254" selected="True" />
+    <IP block="192.168.2" start="1" end="254" selected="True" />
+    <IP block="192.168.3" start="1" end="254" selected="True" />
+  </IPList>
+</ROOT>

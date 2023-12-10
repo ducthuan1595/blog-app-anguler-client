@@ -1,0 +1,28 @@
+<div class="container" style="width: 800px; margin: 40px 0;">
+  <div class="row my-2" *ngIf="post">
+    <div class="col-12">
+      <strong>Author:</strong> {{post.userId.username}}
+    </div>
+    <div class="col-12">
+      <strong>Topic:</strong> {{post.categoryId.name}}
+    </div>
+    <div class="col-12">
+      <strong>Public Date:</strong> {{formatDate(post.createdAt)}}
+    </div>
+    <div class="col-12">
+      <img [src]="post.image[0].url" [alt]="post.title">
+    </div>
+  </div>
+  <div class="row my-2">
+    <h3>{{post.title}}</h3>
+    <div class="col-12">
+      <p>{{post.desc}}</p>
+    </div>
+  </div>
+  <div class="row">
+    <div class="col-4">
+      <button (click)="onReturn()" class="btn btn-secondary">Cancel</button>
+      <button (click)="onDelete()" class="btn btn-danger">Remove</button>
+    </div>
+  </div>
+</div>

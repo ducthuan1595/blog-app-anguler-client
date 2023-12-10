@@ -1,0 +1,53 @@
+.blog-container {
+  margin-top: 100px;
+  max-width : 800px;
+}
+
+.title {
+  margin: 60px 0;
+}
+
+.title-post:hover {
+  text-decoration:underline;
+  cursor: pointer;
+}
+
+
+.category-item a {
+  font-size      : 18px;
+  text-decoration: none;
+  color          : #000;
+  cursor         : pointer;
+}
+
+
+.list-post {
+  margin: 20px 0;
+}
+
+.info-post {
+  margin-left: 60px;
+}
+
+.info-post span {
+  font-size: 12px;
+}
+
+.description {
+  height            : 3.6;
+  overflow          : hidden;
+  display           : -webkit-box;
+  -webkit-box-orient: vertical;
+  -webkit-line-clamp: 2;
+  margin-bottom     : 40px;
+
+}
+
+.navigation-post {
+  display        : flex;
+  justify-content: flex-end;
+  margin-bottom  : 50px;
+}
+.active-nav {
+  color: #8bbdf9 !important;
+}

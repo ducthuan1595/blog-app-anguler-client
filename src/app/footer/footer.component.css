@@ -1,0 +1,24 @@
+.footer {
+  background-color   : #bb5a3a;
+  /* height          : 100px; */
+  display            : flex;
+  justify-content    : space-around;
+  align-items        : center;
+  padding            : 20px 0 20px 0;
+  color              : #fff;
+}
+
+.form-message {
+  background-color: #fef2f0;
+  padding         : 40px 0 180px 0;
+  ;
+}
+
+.form-message h1 {
+  text-align: center;
+  margin    : 60px 0;
+}
+
+.footer p {
+  margin: 0;
+}

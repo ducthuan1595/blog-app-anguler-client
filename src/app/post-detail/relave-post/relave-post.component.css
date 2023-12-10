@@ -1,0 +1,31 @@
+.post-item {
+  margin: auto;
+  margin-bottom: 50px;
+  cursor: pointer;
+}
+
+.title-post {
+  font-size: 15px;
+}
+.inline {
+  height          : 1px;
+  background-color: #d5d5d5;
+  width           : 100%;
+  margin-bottom   : 10px;
+}
+.author {
+  display: flex;
+}
+
+.footer-post {
+  /* display: flex; */
+}
+.footer-post__first {
+  gap: 10px;
+}
+.footer-post__last {
+  margin-right: 20px;
+}
+.footer-post__last i{
+  color: red;
+}

@@ -1,0 +1,12 @@
+.manage {
+  margin: 50px 0;
+}
+
+.image-table {
+  width: 100px;
+}
+
+.message-err {
+  font-size: 12px;
+  color    : chocolate;
+}

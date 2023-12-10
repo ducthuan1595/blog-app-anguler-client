@@ -1,0 +1,53 @@
+.cursor {
+  cursor: pointer;
+}
+.relative {
+  position: relative;
+}
+.popup {
+  position: absolute;
+  right: 30px;
+  top: 20px;
+  width: 80px;
+  padding: 10px;
+  box-shadow: 0 0 6px rgb(16 0 0 / 35%);
+  list-style: none;
+  background-color: #fff;
+  z-index: 5;
+}
+.popup li {
+  cursor: pointer;
+}
+.popup li:hover {
+  opacity: 0.7;
+}
+.list-post {
+  margin: 20px 0;
+}
+
+.info-post {
+  margin-left: 60px;
+}
+
+.info-post span {
+  font-size: 12px;
+}
+
+.description {
+  height            : 3.6;
+  overflow          : hidden;
+  display           : -webkit-box;
+  -webkit-box-orient: vertical;
+  -webkit-line-clamp: 2;
+  margin-bottom     : 40px;
+
+}
+
+.navigation-post {
+  display        : flex;
+  justify-content: flex-end;
+  margin-bottom  : 50px;
+}
+.active-nav {
+  color: #8bbdf9 !important;
+}

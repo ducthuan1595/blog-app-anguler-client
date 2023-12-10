@@ -1,0 +1,72 @@
+<div class="container manage">
+  <h1 class="text-center" style="margin-top: 50px">Topic</h1>
+  <table class="table">
+    <thead>
+      <tr>
+        <th scope="col">#</th>
+        <th scope="col">Name</th>
+        <th scope="col">Image</th>
+        <th scope="col">CreateAt</th>
+        <th scope="col">Action</th>
+      </tr>
+    </thead>
+    <tbody>
+      <tr *ngFor="let category of categories; let i = index">
+        <th scope="row">{{ i + 1 }}</th>
+        <td>{{ category.name }}</td>
+        <td><img class="image-table" [src]="category.image.url" alt="" /></td>
+        <td>{{ formatDate(category.createdAt) }}</td>
+        <td>
+          <button class="btn btn-warning m-2" (click)="onUpdate(category._id)">
+            Edit</button
+          ><button class="btn btn-danger" (click)="onDelete(category._id)">
+            Delete
+          </button>
+        </td>
+      </tr>
+    </tbody>
+  </table>
+  <h1 style="margin-top: 100px" class="text-center">
+    {{ isEdit ? "Update Topic" : "Create Topic" }}
+  </h1>
+  <form #f="ngForm" (ngSubmit)="onSubmit(f)">
+    <div class="mb-3">
+      <label for="exampleInputEmail1" class="form-label">Name</label>
+      <input
+        type="text"
+        class="form-control"
+        id="exampleInputEmail1"
+        aria-describedby="emailHelp"
+        name="name"
+        [(ngModel)]="name"
+        required
+      />
+    </div>
+    <div class="mb-3">
+      <label for="exampleInputPassword1" class="form-label">Image</label>
+      <input
+        type="file"
+        class="form-control"
+        id="exampleInputPassword1"
+        (change)="onChange($event)"
+      />
+    </div>
+    <div class="mb-3">
+      <img
+        src="{{
+          previewImageUrl
+            ? previewImageUrl
+            : 'https://t4.ftcdn.net/jpg/02/51/95/53/360_F_251955356_FAQH0U1y1TZw3ZcdPGybwUkH90a3VAhb.jpg'
+        }}"
+        alt=""
+        style="width: 200px"
+      />
+    </div>
+    <div class="mb-3">
+      <span class=".message-err" *ngIf="errMessage">{{ errMessage }}</span>
+    </div>
+    <button [disabled]="isLoading" type="submit" class="btn btn-primary">
+      Submit
+    </button>
+  </form>
+</div>

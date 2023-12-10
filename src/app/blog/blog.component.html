@@ -1,0 +1,68 @@
+<app-header></app-header>
+
+<div class="container-md blog-container">
+  <div class="col-12 text-center">
+    <h1 class="title">Lovely little things</h1>
+  </div>
+  <div class="row">
+    <div class="col-8 d-flex justify-content-start gutters">
+      <div class="category-item">
+        <a [class.active-nav]="navLink === 'all'" (click)="onCategoryPost('all', 'all')">All Posts</a>
+      </div>
+      <div class="category-item" *ngFor="let item of categories">
+        <a [class.active-nav]="navLink === item.name" (click)="onCategoryPost(item._id, item.name)">{{ item.name }}</a>
+      </div>
+    </div>
+    <div class="col-4 d-flex justify-content-end">
+      <button class="btn btn-primary" (click)="onActive()">
+        {{ user ? "Create a post" : "Log in / Sign up" }}
+      </button>
+    </div>
+  </div>
+  <div class="row">
+    <div class="col-12 list-post" *ngFor="let post of posts">
+      <div class="row post-item-row">
+        <div class="col-5">
+          <img
+            [src]="post.image[0].url"
+            [alt]="post.title"
+            style="width: 360px; max-height: 250px;"
+          />
+        </div>
+        <div class="col-6 info-post">
+          <span>{{ formatDate(post.createdAt) }}</span>
+          <h3 class="title-post" (click)="onDetail(post._id, post.categoryId._id)">{{ post.title }}</h3>
+          <div class="description">{{ post.desc }}</div>
+        </div>
+      </div>
+    </div>
+    <div class="col-12">
+      <nav aria-label="Page navigation">
+        <ul class="pagination navigation-post">
+          <li class="page-item">
+            <button
+              class="btn btn-primary"
+              (click)="onPrevPage()"
+              *ngIf="prevPage"
+            >
+              Previous
+            </button>
+          </li>
+          <li class="page-item">
+            <span class="page-link" style="margin: 0 6px">{{ currPage }}</span>
+          </li>
+          <li class="page-item">
+            <button
+              class="btn btn-primary"
+              (click)="onNextPage()"
+              *ngIf="nextPage"
+            >
+              Next
+            </button>
+          </li>
+        </ul>
+      </nav>
+    </div>
+  </div>
+</div>
+<app-footer></app-footer>

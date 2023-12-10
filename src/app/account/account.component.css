@@ -1,0 +1,36 @@
+.account {
+  margin: 80px 0;
+}
+.cursor-pointer {
+  cursor: pointer;
+  font-style: italic;
+  font-size: 18px;
+}
+.cursor-pointer:first-child {
+  color:aquamarine;
+}
+.image {
+  text-align: center;
+}
+.username {
+  font-style: italic;
+  font-weight: 400;
+  text-transform: capitalize;
+  text-align: center;
+}
+.inline {
+  width: 100%;
+  margin: 40px 0;
+  height: 1px;
+  background-color: #000;
+}
+.list-nav {
+  display: flex;
+  flex-direction: column;
+  justify-content: flex-start;
+  list-style: none;
+  gap: 20px;
+}
+.cursor-pointer i {
+  margin-right: 10px;
+}
