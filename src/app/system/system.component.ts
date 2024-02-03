@@ -25,11 +25,9 @@ export class SystemComponent implements OnInit, DoCheck {
   constructor(private router: Router, private authService: AuthService, private postService: PostService) {}
 
   ngOnInit() {
-    this.authService.getLoggedUser().subscribe((user) => {
-      console.log(user);
-      
-      if(user && user.role === 'F2') {
-        this.user = user;
+    this.authService.getLoggedUser().subscribe((data) => {      
+      if(data && data.user.role === 'F2') {
+        this.user = data.user;
       }
     });
     this.authService.logoutUser.subscribe(() => {

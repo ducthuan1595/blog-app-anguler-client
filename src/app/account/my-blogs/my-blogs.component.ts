@@ -79,7 +79,9 @@ export class MyBlogsComponent implements OnInit {
   }
 
   fetPosts() {
-    this.postService.getPostUser(1, 4).subscribe(res => {      
+    this.postService.getPostUser(1, 4).subscribe(res => {  
+      console.log(res);
+          
       if(res.message === 'ok') {
         this.prevPage = res.data.prevPage;
         this.nextPage = res.data.nextPage;

@@ -55,7 +55,7 @@ export class DashboardComponent implements OnInit {
     const day = date.getDay();
     const month = date.getMonth() + 1;
     const year = date.getFullYear();
-    return ` ${day >= 10 ? day : '0' + day}/${month + 1}/${year}`;
+    return ` ${day >= 10 ? day : '0' + day}/${month >= 10 ? month : '0' + month}/${year}`;
   }
 
   onPrevPage() {

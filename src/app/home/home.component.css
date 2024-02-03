@@ -39,7 +39,7 @@
 
 .box {
   position: absolute;
-  top     : 250px;
+  top     : 180px;
   padding : 20px 50px;
   cursor  : pointer;
 }
@@ -48,15 +48,15 @@
   color: inherit;
 }
 
-.box-1 {
+.Food {
   background-color: #ffe5ce;
 }
 
-.box-2 {
+.Family {
   background-color: #eaf2f5;
 }
 
-.box-3 {
+.Lifestyle {
   background-color: #e8f3e4;
 }
 
@@ -64,7 +64,7 @@
   display   : block;
   text-align: center;
   width     : 350px;
-  height    : 300px;
+  height    : 230px;
 }
 
 .box-title {

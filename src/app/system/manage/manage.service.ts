@@ -4,6 +4,7 @@ import { Subject } from 'rxjs';
 
 interface CategoryType {
   name: string;
+  slogan: string;
   image: {
     public_id: string;
     url: string;
@@ -18,7 +19,7 @@ export interface ResCategoryType extends CategoryType {
 @Injectable({ providedIn: 'root' })
 export class ManageService {
   categoriesChanged = new Subject<ResCategoryType[]>();
-  URL = 'http://localhost:9000';
+  URL = 'http://localhost:5000';
 
   constructor(private http: HttpClient) {}
 

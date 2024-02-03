@@ -11,14 +11,19 @@ export interface AuthResponseType {
   role: string;
 }
 
+interface AuthResponseTypeCustom {
+  token: string;
+  user: AuthResponseType;
+}
+
 @Injectable({ providedIn: 'root' })
 export class AuthService {
-  URL = 'http://localhost:9000';
+  URL = 'http://localhost:5000';
   user: AuthResponseType;
   isUser = false;
 
-  loggedUser: BehaviorSubject<AuthResponseType> =
-    new BehaviorSubject<AuthResponseType>(null);
+  loggedUser: BehaviorSubject<AuthResponseTypeCustom> =
+    new BehaviorSubject<AuthResponseTypeCustom>(null);
   logoutUser: EventEmitter<void> = new EventEmitter<void>();
 
   constructor(private http: HttpClient, private router: Router) {
@@ -31,21 +36,28 @@ export class AuthService {
   isAuthenticated() {
     const promise = new Promise((resolve, reject) => {
       setTimeout(() => {
-        if(this.loggedUser) {
-          if(!this.loggedUser || !this.loggedUser.value || this.loggedUser.value.role !== 'F2') {
-            resolve(false)
+        if (this.loggedUser) {
+          console.log(this.loggedUser);
+
+          if (
+            !this.loggedUser ||
+            !this.loggedUser.value ||
+            !this.loggedUser.value.user ||
+            this.loggedUser.value.user.role !== 'F2'
+          ) {
+            resolve(false);
           }
           const isAuth = !!this.loggedUser.value;
           resolve(isAuth);
         }
-        resolve(false)
+        resolve(false);
       }, 800);
     });
     return promise;
   }
 
   signup(email: string, password: string, username: string) {
-    return this.http.post<{ message: string }>(`${this.URL}/v1/api/signup`, {
+    return this.http.post<{ message: string }>(`${this.URL}/v2/api/signup`, {
       email,
       password,
       username,
@@ -54,8 +66,8 @@ export class AuthService {
 
   login(email: string, password: string) {
     this.http
-      .post<{ message: string; data: AuthResponseType }>(
-        `${this.URL}/v1/api/login`,
+      .post<{ message: string; data: AuthResponseTypeCustom }>(
+        `${this.URL}/v2/api/login`,
         {
           email,
           password,
@@ -73,8 +85,8 @@ export class AuthService {
 
   loginAd(email: string, password: string) {
     this.http
-      .post<{ message: string; data: AuthResponseType }>(
-        `${this.URL}/v1/api/login-ad`,
+      .post<{ message: string; data: AuthResponseTypeCustom }>(
+        `${this.URL}/v2/api/login-auth`,
         {
           email,
           password,
@@ -82,6 +94,8 @@ export class AuthService {
       )
       .subscribe(
         (res) => {
+          console.log(res);
+
           this.loggedUser.next(res.data);
           this.router.navigate(['/system/dashboard']);
         },
@@ -104,7 +118,7 @@ export class AuthService {
     this.router.navigate(['/system']);
   }
 
-  getLoggedUser(): Observable<AuthResponseType> {
+  getLoggedUser(): Observable<AuthResponseTypeCustom> {
     return this.loggedUser.asObservable();
   }
 }

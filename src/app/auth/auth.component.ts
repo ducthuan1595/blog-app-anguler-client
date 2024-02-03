@@ -19,6 +19,7 @@ export class AuthComponent {
   }
 
   onSubmit(form: NgForm) {
+    this.errorMessage = '';
     if (!form.valid) {
       return;
     }

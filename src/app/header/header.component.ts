@@ -25,9 +25,9 @@ export class HeaderComponent implements OnInit {
   ngOnInit(): void {
     const currentURL = this.router.url.split('/')[1];
     this.currURL = currentURL;    
-    this.authService.getLoggedUser().subscribe((user) => {
-      this.userClient = user;
-      this.isUser = !!user;
+    this.authService.getLoggedUser().subscribe((data) => {
+      this.userClient = data.user;
+      this.isUser = !!data.user;
     });
   }
 

@@ -47,8 +47,8 @@ export class ManageBlogComponent implements OnInit {
         this.categories = res.data;
       }
     });
-    this.authService.getLoggedUser().subscribe((user) => {
-      this.userClient = user;
+    this.authService.getLoggedUser().subscribe((data) => {
+      this.userClient = data.user;
     });
     const id = this.route.snapshot.paramMap.get('postId');
     if(id) {

@@ -13,8 +13,8 @@ export class AccountComponent implements OnInit {
   constructor(private authService: AuthService, private route: ActivatedRoute) {};
 
   ngOnInit(): void {
-    this.authService.getLoggedUser().subscribe(user => {
-      this.user = user;
+    this.authService.getLoggedUser().subscribe(data => {
+      this.user = data.user;
     })
     const slug = this.route.snapshot.paramMap.get('slug');
     console.log(slug);

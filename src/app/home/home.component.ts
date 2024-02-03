@@ -1,7 +1,9 @@
 import { Component, EventEmitter, Input, OnInit } from '@angular/core';
 import { ResponsePostType } from '../models/post.model';
 import { PostService } from '../post.service';
+import { ManageService } from '../system/manage/manage.service';
 import { Router } from '@angular/router';
+import { ResCategoryType } from '../system/manage/manage.service';
 
 @Component({
   selector: 'app-home',
@@ -9,12 +11,13 @@ import { Router } from '@angular/router';
   styleUrl: './home.component.css',
 })
 export class HomeComponent implements OnInit {
+  categories: ResCategoryType[] = [];
   posts: ResponsePostType[] = [];
   currPage: number = 1;
   nextPage: boolean;
   prevPage: boolean;
 
-  constructor(private postService: PostService, private router: Router) {}
+  constructor(private postService: PostService, private categoryService: ManageService,private router: Router) {}
 
   ngOnInit(): void {
     this.postService.getPosts(this.currPage, 2).subscribe((res) => {
@@ -24,6 +27,14 @@ export class HomeComponent implements OnInit {
         this.posts = res.data.posts;
       }
     });
+    this.categoryService.getCategories().subscribe((res) => {
+      if(res.message === 'ok') {
+        const data = res.data.slice(0,3);
+        console.log(data);
+        
+        this.categories = data;
+      }
+    })
   }
 
   formatDate(d: Date) {

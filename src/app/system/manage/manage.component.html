@@ -5,6 +5,7 @@
       <tr>
         <th scope="col">#</th>
         <th scope="col">Name</th>
+        <th scope="col">Slogan</th>
         <th scope="col">Image</th>
         <th scope="col">CreateAt</th>
         <th scope="col">Action</th>
@@ -14,6 +15,7 @@
       <tr *ngFor="let category of categories; let i = index">
         <th scope="row">{{ i + 1 }}</th>
         <td>{{ category.name }}</td>
+        <td>{{ category.slogan }}</td>
         <td><img class="image-table" [src]="category.image.url" alt="" /></td>
         <td>{{ formatDate(category.createdAt) }}</td>
         <td>
@@ -43,6 +45,18 @@
       />
     </div>
     <div class="mb-3">
+      <label for="exampleInputEmail1" class="form-label">Slogan</label>
+      <input
+        type="text"
+        class="form-control"
+        id="exampleInputEmail1"
+        aria-describedby="emailHelp"
+        name="slogan"
+        [(ngModel)]="slogan"
+        required
+      />
+    </div>
+    <div class="mb-3">
       <label for="exampleInputPassword1" class="form-label">Image</label>
       <input
         type="file"
@@ -63,9 +77,9 @@
       />
     </div>
     <div class="mb-3">
-      <span class=".message-err" *ngIf="errMessage">{{ errMessage }}</span>
+      <span class="message-err" *ngIf="errMessage">{{ errMessage }}</span>
     </div>
-    <button [disabled]="isLoading" type="submit" class="btn btn-primary">
+    <button type="submit" [disabled]="isLoading" class="btn btn-primary">
       Submit
     </button>
   </form>

@@ -16,8 +16,9 @@ export class ManageComponent implements OnInit {
   };
   previewImageUrl = '';
   name = '';
+  slogan = '';
 
-  isLoading = true;
+  isLoading = false;
   isEdit = false;
   categoryId = '';
   errMessage = '';
@@ -42,6 +43,7 @@ export class ManageComponent implements OnInit {
   }
 
   onChange(event: any) {
+    this.isLoading = true;
     this.cloundinary.upload(event.target.files[0]).subscribe(
       (res) => {
         this.previewImageUrl = URL.createObjectURL(event.target.files[0]);
@@ -57,11 +59,15 @@ export class ManageComponent implements OnInit {
   }
 
   onSubmit(form: NgForm) {
-    if (!form.valid || !this.user)
+    console.log(form, this.user);
+    
+    if (!form.valid || !this.user || !this.image.url) {
       return (this.errMessage = 'Value input valid! Please try again.');
+    }
     const data = {
       name: form.value.name,
       image: this.image,
+      slogan: form.value.slogan
     };
     if (this.isEdit) {
       this.manageService.editCategory(data, this.categoryId).subscribe(
@@ -74,6 +80,7 @@ export class ManageComponent implements OnInit {
               const updateCategory = this.categories[index];
               updateCategory.name = res.data.name;
               updateCategory.image = res.data.image;
+              updateCategory.slogan = res.data.slogan;
               this.categories[index] = updateCategory;
             }
           }
@@ -97,7 +104,9 @@ export class ManageComponent implements OnInit {
     this.categories.filter((item) => {
       if (item._id === id) {
         this.name = item.name;
+        this.slogan = item.slogan;
         this.previewImageUrl = item.image.url;
+        this.image = item.image;
       }
     });
     window.scrollTo(0, 560);
