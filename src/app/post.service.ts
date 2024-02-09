@@ -29,7 +29,7 @@ export class PostService {
 
   getPostDetail(postId: string) {
     return this.http.get<{ message: string; data: ResponsePostType }>(
-      `${this.URL}/v1/api/post-detail?postId=${postId}`
+      `${this.URL}/v1/api/post?postId=${postId}`
     );
   }
 

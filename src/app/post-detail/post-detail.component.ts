@@ -22,41 +22,22 @@ export class PostDetailComponent implements OnInit, DoCheck {
 
 
   ngOnInit(): void {
-    const data = history.state.data;
-    
-    if(data) {
-      this.post = data;
-    }else {
-      const id = this.route.snapshot.paramMap.get('id');    
-      const categoryId = this.route.snapshot.paramMap.get('categoryId');    
-      this.fetchData(id, categoryId)
-    }
+    // HANDLE WHEN PARAMS CHANGED
+    this.route.paramMap.subscribe((params) => {
+      let id = params.get('id');
+      let category = params.get('categoryId');
+      this.fetchData(id, category);
+    });
   }
 
   ngDoCheck(): void {    
-    
-    const data = history.state.data;
-    // if(this.changed.toString() !== data._id.toString()) {
-    //   this.isChange = true;
-    // }
-    // if(this.isChange) {
-    //   console.log('post');
-      
-    // }
-    const id = this.route.snapshot.paramMap.get('id');    
-    const categoryId = this.route.snapshot.paramMap.get('categoryId');  
-    if(this.changed.toString() !== id.toString())  this.isChange = true;
-    if(this.isChange) {  
-      this.fetchData(id, categoryId)
-      this.isChange = false;
-    }
   }
 
   fetchData(id:string, categoryId: string) {
     this.postService.getPostDetail(id).subscribe(res => {
-      if(res.message === 'ok') {   
+      if(res.message === 'ok') {
         console.log(res.data);
-             
+                      
         this.post = res.data;
         this.changed = id;
         this.isChange = false;
@@ -102,7 +83,7 @@ export class PostDetailComponent implements OnInit, DoCheck {
     });
   }
 
-  onDetail(id:string, category:string) {
+  onDetail(id:string, category:string) {    
     this.router.navigate(['/blog-detail', id, category]);
     window.scrollTo(0,0);
   }

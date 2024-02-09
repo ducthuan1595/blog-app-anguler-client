@@ -23,11 +23,12 @@ export class ManageBlogComponent implements OnInit {
   title = '';
   categoryId='';
   desc= '';
-  image: { public_id: string; url: string } = {
-    public_id: '',
-    url: '',
-  };
-  previewImageUrl: string = '';
+  image: { public_id: string; url: string }[] = [
+    {
+      public_id: '',
+      url: '',
+    }
+  ];
 
   categories: ResCategoryType[] = [];
   userClient: AuthResponseType;
@@ -52,45 +53,51 @@ export class ManageBlogComponent implements OnInit {
     });
     const id = this.route.snapshot.paramMap.get('postId');
     if(id) {
-      this.postService.getPostDetail(id).subscribe(res => {
+      this.postService.getPostDetail(id).subscribe(res => {        
         if(res.message === 'ok') {
           this.postId = id;
           this.isEdit = true;
           this.title = res.data.title;
           this.desc = res.data.desc;
-          this.previewImageUrl = res.data.image[0].url;
+          this.image = res.data.image;
         }
       })
     }
   }
 
   onImage(event: any) {
-    if (event.target.files) {
-      this.cloundinary.upload(event.target.files[0]).subscribe(
-        (res) => {
-          this.image.public_id = res.public_id;
-          this.image.url = res.url;
-          this.previewImageUrl = res.url;
-          console.log('Upload successful');
-          this.isLoading = false;
-        },
-        (err) => {
-          console.log(err);
-        }
-      );
+    const images = event.target.files;
+    
+    if (images) {
+      this.image = [];
+      for(const image of images) {
+        this.cloundinary.upload(image).subscribe(
+          (res) => {
+            
+            let value = {
+              url: res.url,
+              public_id: res.public_id
+            }
+            this.image.push(value)
+            console.log('Upload successful');
+            this.isLoading = false;
+          },
+          (err) => {
+            console.log(err);
+          }
+        );
+      }
     }
   }
 
   onSubmit(form: NgForm) {
-    if (!form.valid || !this.userClient) {
+    
+    if (!form.valid || !this.userClient || this.image.length < 1) {
       return this.errMessage = 'The fields are not empty!'
     }
     const data: RequestPostType = {
       title: form.value.title,
-      image: {
-        public_id: this.image.public_id,
-        url: this.image.url,
-      },
+      image: this.image,
       categoryId: form.value.categoryId,
       desc: form.value.desc,
     };

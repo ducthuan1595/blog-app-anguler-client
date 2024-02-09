@@ -4,7 +4,7 @@ export interface ResponsePostType {
   image: {
     public_id: string;
     url: string;
-  };
+  }[];
   desc: string;
   categoryId: {
     name: string;
@@ -34,7 +34,7 @@ export interface RequestPostType {
   image: {
     public_id: string;
     url: string;
-  };
+  }[];
   desc: string;
   categoryId: string;
 }

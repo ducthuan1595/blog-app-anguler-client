@@ -1,5 +1,5 @@
 import { Component, OnInit } from '@angular/core';
-import { ActivatedRoute, Params, Router } from '@angular/router';
+import { ActivatedRoute, NavigationExtras, Params, Router } from '@angular/router';
 import { PostService } from '../post.service';
 import { ResponsePostType } from '../models/post.model';
 import { AuthResponseType, AuthService } from '../auth/auth.service';
@@ -35,6 +35,7 @@ export class BlogComponent implements OnInit {
       this.user = data.user;
     });
     this.categoryService.getCategories().subscribe((res) => {
+      
       if (res.message === 'ok') {
         this.categories = res.data;
         const currentRouteUrl = this.router.url.split('/')[2];
@@ -62,12 +63,19 @@ export class BlogComponent implements OnInit {
     }
   }
 
-  onDetail(id: string, category:string) {
+  onDetail(id: string, category:string, post: ResponsePostType) {    
+    // const  navigationExtras: NavigationExtras = {
+    //   queryParams: {
+    //     post: JSON.stringify(post)
+    //   }
+    // }
     this.router.navigate(['/blog-detail', id, category]);
     window.scrollTo(0,0)
   }
 
   onCategoryPost(categoryId: string, name: string) {
+    console.log(name);
+    
     if (name === 'all') {
       this.fetchPost();
       this.router.navigate(['/blog', name])
@@ -114,7 +122,9 @@ export class BlogComponent implements OnInit {
 
   fetchPost() {
     this.postService.getPosts(this.currPage, 4).subscribe((res) => {
+      console.log(res);
       if (res.message === 'ok') {
+        
         this.nextPage = res.data.nextPage;
         this.prevPage = res.data.prevPage;
         this.posts = res.data.posts;

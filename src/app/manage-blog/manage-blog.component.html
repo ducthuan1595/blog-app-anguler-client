@@ -41,18 +41,21 @@
                 class="form-control"
                 id="recipient-name"
                 name="image"
+                multiple
                 (change)="onImage($event)"
               />
-              <div class="mb-3">
-                <img
-                  src="{{
-                    previewImageUrl
-                      ? previewImageUrl
-                      : 'https://t4.ftcdn.net/jpg/02/51/95/53/360_F_251955356_FAQH0U1y1TZw3ZcdPGybwUkH90a3VAhb.jpg'
-                  }}"
-                  alt=""
-                  style="width: 100px"
-                />
+              <div class="mb-3 d-flex">
+                <div *ngFor="let img of image">
+                  <img
+                    src="{{
+                      img.url
+                        ? img.url
+                        : 'https://t4.ftcdn.net/jpg/02/51/95/53/360_F_251955356_FAQH0U1y1TZw3ZcdPGybwUkH90a3VAhb.jpg'
+                    }}"
+                    alt=""
+                    style="width: 100px"
+                  />
+                </div>
               </div>
             </div>
           </div>
