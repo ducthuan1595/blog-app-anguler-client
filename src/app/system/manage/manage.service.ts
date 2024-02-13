@@ -5,6 +5,7 @@ import { Subject } from 'rxjs';
 interface CategoryType {
   name: string;
   slogan: string;
+  active: number;
   image: {
     public_id: string;
     url: string;

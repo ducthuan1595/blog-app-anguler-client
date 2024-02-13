@@ -48,7 +48,7 @@ export class HeaderComponent implements OnInit {
       this.postService.searchPost(this.searchResult).subscribe(res => {
         if(res.message === 'ok') {
           this.posts = res.data;
-          this.isPopup = !this.isPopup;
+          this.isPopup = true;
         }
       })
     }

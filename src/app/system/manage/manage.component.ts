@@ -17,6 +17,7 @@ export class ManageComponent implements OnInit {
   previewImageUrl = '';
   name = '';
   slogan = '';
+  active = 1;
 
   isLoading = false;
   isEdit = false;
@@ -59,15 +60,16 @@ export class ManageComponent implements OnInit {
   }
 
   onSubmit(form: NgForm) {
-    console.log(form, this.user);
+    console.log(form);
     
     if (!form.valid || !this.user || !this.image.url) {
-      return (this.errMessage = 'Value input valid! Please try again.');
+      return (this.errMessage = 'Value input invalid! Please try again.');
     }
     const data = {
       name: form.value.name,
       image: this.image,
-      slogan: form.value.slogan
+      slogan: form.value.slogan,
+      active: form.value.active
     };
     if (this.isEdit) {
       this.manageService.editCategory(data, this.categoryId).subscribe(
@@ -81,6 +83,7 @@ export class ManageComponent implements OnInit {
               updateCategory.name = res.data.name;
               updateCategory.image = res.data.image;
               updateCategory.slogan = res.data.slogan;
+              updateCategory.active = res.data.active;
               this.categories[index] = updateCategory;
             }
           }
@@ -105,6 +108,7 @@ export class ManageComponent implements OnInit {
       if (item._id === id) {
         this.name = item.name;
         this.slogan = item.slogan;
+        this.active = item.active;
         this.previewImageUrl = item.image.url;
         this.image = item.image;
       }
@@ -129,6 +133,6 @@ export class ManageComponent implements OnInit {
     const day = date.getDay();
     const month = date.getMonth() + 1;
     const year = date.getFullYear();
-    return ` ${day >= 10 ? day : '0' + day}/${month + 1}/${year}`;
+    return ` ${day >= 10 ? day : '0' + day}/${month}/${year}`;
   }
 }
