@@ -29,6 +29,10 @@ export class AuthComponent {
 
     if (this.isLogin) {
       this.authService.login(email, password);
+      this.authService.transmitter().subscribe((res) => {
+        this.errorMessage = res;
+      })
+      
     } else {
       this.authService.signup(email, password, username).subscribe(
         (res) => {

@@ -21,6 +21,7 @@ export class AuthService {
   URL = 'http://localhost:5000';
   user: AuthResponseType;
   isUser = false;
+  private message: BehaviorSubject<string> = new BehaviorSubject<string>('');
 
   loggedUser: BehaviorSubject<AuthResponseTypeCustom> =
     new BehaviorSubject<AuthResponseTypeCustom>(null);
@@ -61,7 +62,7 @@ export class AuthService {
       email,
       password,
       username,
-    });
+    })
   }
 
   login(email: string, password: string) {
@@ -80,6 +81,10 @@ export class AuthService {
           this.router.navigate(['']);
           this.isUser = true;
         }
+        
+      }, (err) => {
+        console.log(err.error.message);
+        this.message.next(err.error.message);
       });
   }
 
@@ -120,5 +125,9 @@ export class AuthService {
 
   getLoggedUser(): Observable<AuthResponseTypeCustom> {
     return this.loggedUser.asObservable();
+  }
+
+  transmitter() {
+    return this.message.asObservable();
   }
 }
