@@ -3,7 +3,7 @@ import {
   ManageService,
   ResCategoryType,
 } from '../system/manage/manage.service';
-import { AuthResponseType, AuthService } from '../auth/auth.service';
+import { UserResponseType, AuthService } from '../auth/auth.service';
 import { UploadCloudinary } from '../util/uploadFile.service';
 import { PostService } from '../post.service';
 import { NgForm } from '@angular/forms';
@@ -30,7 +30,7 @@ export class ManageBlogComponent implements OnInit {
   previewImageUrl: string = '';
 
   categories: ResCategoryType[] = [];
-  userClient: AuthResponseType;
+  userClient: UserResponseType;
 
   constructor(
     private cloundinary: UploadCloudinary,
@@ -47,8 +47,8 @@ export class ManageBlogComponent implements OnInit {
         this.categories = res.data;
       }
     });
-    this.authService.getLoggedUser().subscribe((user) => {
-      this.userClient = user;
+    this.authService.getLoggedUser().subscribe((res) => {
+      this.userClient = res.user;
     });
     const id = this.route.snapshot.paramMap.get('postId');
     if(id) {

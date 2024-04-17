@@ -1,5 +1,5 @@
 import { Component, OnInit } from '@angular/core';
-import { AuthResponseType, AuthService } from '../auth/auth.service';
+import { UserResponseType, AuthService } from '../auth/auth.service';
 import { ActivatedRoute } from '@angular/router';
 
 @Component({
@@ -8,13 +8,13 @@ import { ActivatedRoute } from '@angular/router';
   styleUrl: './account.component.css'
 })
 export class AccountComponent implements OnInit {
-  user: AuthResponseType;
+  user: UserResponseType;
 
   constructor(private authService: AuthService, private route: ActivatedRoute) {};
 
   ngOnInit(): void {
-    this.authService.getLoggedUser().subscribe(user => {
-      this.user = user;
+    this.authService.getLoggedUser().subscribe(res => {
+      this.user = res.user;
     })
     const slug = this.route.snapshot.paramMap.get('slug');
     console.log(slug);

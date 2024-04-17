@@ -19,8 +19,12 @@ a {
   text-shadow: 0 0 66px rgb(16 0 0 / 35%);
 }
 
+.nav-link:hover {
+  color: #bbd53a !important;
+}
+
 .active {
-  color: #87bcf9 !important;
+  color: #075fc3 !important;
 }
 
 .logo {

@@ -28,7 +28,7 @@ export class SystemComponent implements OnInit, DoCheck {
     this.authService.getLoggedUser().subscribe((user) => {
       console.log(user);
       
-      if(user && user.role === 'F2') {
+      if(user && user.user.role === 'F2') {
         this.user = user;
       }
     });

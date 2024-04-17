@@ -16,10 +16,10 @@ export class AuthInterceptor implements HttpInterceptor {
 
   intercept(req: HttpRequest<any>, next: HttpHandler): any {
     // return next.handle(req);
-    this.authService.getLoggedUser().subscribe((user) => {
-      if (user && user.token) {
-        this.token = user.token;
-        this.userRole = user.role;
+    this.authService.getLoggedUser().subscribe((res) => {
+      if (res && res.token) {
+        this.token = res.token;
+        this.userRole = res.user.role;
       }
     });
     if (this.userRole === 'F2') {

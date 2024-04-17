@@ -13,7 +13,7 @@ export interface RequestPostTypeEdit extends RequestPostType {
 
 @Injectable({ providedIn: 'root' })
 export class PostService {
-  URL = 'http://localhost:9000';
+  URL = 'http://localhost:5000';
 
   constructor(private http: HttpClient, private router: Router) {}
 

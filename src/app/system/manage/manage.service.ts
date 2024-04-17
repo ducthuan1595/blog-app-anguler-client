@@ -18,7 +18,7 @@ export interface ResCategoryType extends CategoryType {
 @Injectable({ providedIn: 'root' })
 export class ManageService {
   categoriesChanged = new Subject<ResCategoryType[]>();
-  URL = 'http://localhost:9000';
+  URL = 'http://localhost:5000';
 
   constructor(private http: HttpClient) {}
 

@@ -1,7 +1,7 @@
 import { Component, DoCheck, Input, OnInit } from '@angular/core';
 import { ResponsePostPageType, ResponsePostType } from '../../models/post.model';
 import { PostService } from '../../post.service';
-import { AuthResponseType, AuthService } from '../../auth/auth.service';
+import { UserResponseType, AuthService } from '../../auth/auth.service';
 import { Router } from '@angular/router';
 
 @Component({
@@ -10,7 +10,7 @@ import { Router } from '@angular/router';
   styleUrl: './my-blogs.component.css'
 })
 export class MyBlogsComponent implements OnInit {
-  @Input() user!:AuthResponseType;
+  @Input() user!:UserResponseType;
   posts: ResponsePostType[];
 
   currPage = 1;

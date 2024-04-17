@@ -18,6 +18,8 @@ export class HomeComponent implements OnInit {
 
   ngOnInit(): void {
     this.postService.getPosts(this.currPage, 2).subscribe((res) => {
+      console.log({res});
+      
       if (res.message === 'ok') {
         this.nextPage = res.data.nextPage;
         this.prevPage = res.data.prevPage;

@@ -2,7 +2,7 @@ import { Component, OnInit } from '@angular/core';
 import { ActivatedRoute, Params, Router } from '@angular/router';
 import { PostService } from '../post.service';
 import { ResponsePostType } from '../models/post.model';
-import { AuthResponseType, AuthService } from '../auth/auth.service';
+import { UserResponseType, AuthService } from '../auth/auth.service';
 import {
   ManageService,
   ResCategoryType,
@@ -15,7 +15,7 @@ import {
 })
 export class BlogComponent implements OnInit {
   posts: ResponsePostType[] = [];
-  user: AuthResponseType = null;
+  user: UserResponseType = null;
   categories: ResCategoryType[] = [];
   currPage: number = 1;
   nextPage: boolean;
@@ -32,11 +32,13 @@ export class BlogComponent implements OnInit {
 
   ngOnInit(): void {
     this.fetchPost();
-    this.authService.getLoggedUser().subscribe((user) => {
-      this.user = user;
+    this.authService.getLoggedUser().subscribe((res) => {
+      this.user = res.user;
     });
     this.categoryService.getCategories().subscribe((res) => {
+      console.log('get category',res);
       if (res.message === 'ok') {
+        
         this.categories = res.data;
       }
     });

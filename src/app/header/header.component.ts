@@ -1,5 +1,5 @@
 import { Component, DoCheck, OnChanges, OnInit, Output, SimpleChanges } from '@angular/core';
-import { AuthResponseType, AuthService } from '../auth/auth.service';
+import { UserResponseType, AuthService } from '../auth/auth.service';
 import { NavigationExtras, Router } from '@angular/router';
 import { PostService } from '../post.service';
 import { ResponsePostType } from '../models/post.model';
@@ -18,16 +18,18 @@ export class HeaderComponent implements OnInit {
   currURL = '';
   post: ResponsePostType;
 
-  userClient: AuthResponseType;
+  userClient: UserResponseType;
 
   constructor(private authService: AuthService, private router: Router, private postService: PostService, private location: Location) {}
 
   ngOnInit(): void {
     const currentURL = this.router.url.split('/')[1];
     this.currURL = currentURL;    
-    this.authService.getLoggedUser().subscribe((user) => {
-      this.userClient = user;
-      this.isUser = !!user;
+    this.authService.getLoggedUser().subscribe((res) => {
+      if(res) {
+        this.userClient = res.user;
+        this.isUser = !!res;
+      }
     });
   }
 
