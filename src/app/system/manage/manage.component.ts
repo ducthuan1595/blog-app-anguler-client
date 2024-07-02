@@ -1,7 +1,7 @@
 import { Component, OnInit } from '@angular/core';
-import { UploadCloudinary } from '../../util/uploadFile.service';
-import { ManageService, ResCategoryType } from './manage.service';
-import { AuthService } from '../../auth/auth.service';
+import { UploadCloudinary } from '../../services/uploadFile.service';
+import { ManageService, ResCategoryType } from '../../services/manage.service';
+import { AuthService } from '../../services/auth.service';
 import { NgForm } from '@angular/forms';
 
 @Component({

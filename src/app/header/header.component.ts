@@ -1,9 +1,10 @@
 import { Component, DoCheck, OnChanges, OnInit, Output, SimpleChanges } from '@angular/core';
-import { UserResponseType, AuthService } from '../auth/auth.service';
+import {  AuthService } from '../services/auth.service';
 import { NavigationExtras, Router } from '@angular/router';
-import { PostService } from '../post.service';
+import { PostService } from '../services/post.service';
 import { ResponsePostType } from '../models/post.model';
 import { Location } from '@angular/common';
+import { UserType } from '../models/user.model';
 
 @Component({
   selector: 'app-header',
@@ -18,7 +19,7 @@ export class HeaderComponent implements OnInit {
   currURL = '';
   post: ResponsePostType;
 
-  userClient: UserResponseType;
+  userClient: UserType;
 
   constructor(private authService: AuthService, private router: Router, private postService: PostService, private location: Location) {}
 
@@ -26,8 +27,8 @@ export class HeaderComponent implements OnInit {
     const currentURL = this.router.url.split('/')[1];
     this.currURL = currentURL;    
     this.authService.getLoggedUser().subscribe((res) => {
-      if(res) {
-        this.userClient = res.user;
+      if(res) {        
+        this.userClient = res;
         this.isUser = !!res;
       }
     });

@@ -1,5 +1,5 @@
 import { Component, OnInit } from '@angular/core';
-import { PostService } from '../../post.service';
+import { PostService } from '../../services/post.service';
 import { ResponsePostType } from '../../models/post.model';
 import { NavigationExtras, Router } from '@angular/router';
 
@@ -20,8 +20,8 @@ export class DashboardComponent implements OnInit {
   ngOnInit(): void {
     this.postService.getPosts(1, 10).subscribe(res => {
       if(res.message === 'ok') {
-        this.prevPage = res.data.prevPage;
-        this.nextPage = res.data.nextPage;
+        this.prevPage = res.data.meta.prevPage;
+        this.nextPage = res.data.meta.nextPage;
         this.posts = res.data.posts;
       }
     })
@@ -63,9 +63,9 @@ export class DashboardComponent implements OnInit {
     this.postService.getPosts(this.currPage - 1, 4).subscribe((res) => {
       if (res.message === 'ok') {
         this.posts = res.data.posts;
-        this.currPage = +res.data.currPage;
-        this.nextPage = res.data.nextPage;
-        this.prevPage = res.data.prevPage;
+        this.currPage = +res.data.meta.currPage;
+        this.nextPage = res.data.meta.nextPage;
+        this.prevPage = res.data.meta.prevPage;
       }
     });
   }
@@ -76,9 +76,9 @@ export class DashboardComponent implements OnInit {
       if (res.message === 'ok') {
         
         this.posts = res.data.posts;
-        this.currPage = +res.data.currPage;
-        this.nextPage = res.data.nextPage;
-        this.prevPage = res.data.prevPage;
+        this.currPage = +res.data.meta.currPage;
+        this.nextPage = res.data.meta.nextPage;
+        this.prevPage = res.data.meta.prevPage;
       }
     });
   }

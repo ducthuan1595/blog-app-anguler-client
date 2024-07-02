@@ -110,3 +110,8 @@
 .comment input {
   padding: 20px;
 }
+
+.blog-review:hover {
+  cursor: pointer;
+  opacity: 0.6;
+}

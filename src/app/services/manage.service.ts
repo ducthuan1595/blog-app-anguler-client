@@ -1,6 +1,7 @@
 import { HttpClient } from '@angular/common/http';
 import { Injectable, OnInit } from '@angular/core';
 import { Subject } from 'rxjs';
+import { URL_SERVER } from '../util/contant';
 
 interface CategoryType {
   name: string;
@@ -18,13 +19,13 @@ export interface ResCategoryType extends CategoryType {
 @Injectable({ providedIn: 'root' })
 export class ManageService {
   categoriesChanged = new Subject<ResCategoryType[]>();
-  URL = 'http://localhost:5000';
+  URL = URL_SERVER;
 
   constructor(private http: HttpClient) {}
 
   createCategory(data: CategoryType) {
     return this.http.post<{ message: string; data: ResCategoryType }>(
-      `${this.URL}/v1/api/create-category`,
+      `${this.URL}/v1/api/category`,
       {
         ...data,
       }
@@ -33,7 +34,7 @@ export class ManageService {
 
   editCategory(data: CategoryType, id: string) {
     return this.http.put<{ message: string; data: ResCategoryType }>(
-      `${this.URL}/v1/api/update-category`,
+      `${this.URL}/v1/api/category`,
       {
         ...data,
         categoryId: id,
@@ -49,7 +50,9 @@ export class ManageService {
 
   removeCategory(id: string) {
     return this.http.delete<{ message: string }>(
-      `${this.URL}/v1/api/delete-category?categoryId=${id}`
+      `${this.URL}/v1/api/delete`, {
+        body: id
+      }
     );
   }
 }

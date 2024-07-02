@@ -1,12 +1,13 @@
 import { Component, OnInit } from '@angular/core';
 import { ActivatedRoute, Params, Router } from '@angular/router';
-import { PostService } from '../post.service';
+import { PostService } from '../services/post.service';
 import { ResponsePostType } from '../models/post.model';
-import { UserResponseType, AuthService } from '../auth/auth.service';
+import { UserType } from '../models/user.model';
+import { AuthService } from '../services/auth.service';
 import {
   ManageService,
   ResCategoryType,
-} from '../system/manage/manage.service';
+} from '../services/manage.service';
 
 @Component({
   selector: 'app-blog',
@@ -15,7 +16,7 @@ import {
 })
 export class BlogComponent implements OnInit {
   posts: ResponsePostType[] = [];
-  user: UserResponseType = null;
+  user: UserType = null;
   categories: ResCategoryType[] = [];
   currPage: number = 1;
   nextPage: boolean;
@@ -31,28 +32,30 @@ export class BlogComponent implements OnInit {
   ) {}
 
   ngOnInit(): void {
-    this.fetchPost();
+    
     this.authService.getLoggedUser().subscribe((res) => {
-      this.user = res.user;
+      if(res) {
+        this.user = res;
+      }
     });
     this.categoryService.getCategories().subscribe((res) => {
-      console.log('get category',res);
       if (res.message === 'ok') {
-        
         this.categories = res.data;
       }
     });
   
     const currentRouteUrl = this.router.url.split('/')[2];
-    if(currentRouteUrl && this.categories) {
-      const check = this.categories.find(item => item.name === currentRouteUrl);
-      if(check) {
-        this.postService.getPostsCategory(1, 4, check._id).subscribe(res => {
-          if(res.message === 'ok') {            
+    
+    if(currentRouteUrl) {
+        this.postService.getPostsCategory(1, 4, currentRouteUrl).subscribe(res => {
+          if(res.message === 'ok') {      
+            this.navLink = currentRouteUrl;
             this.posts = res.data.posts;
           }
         })
-      }
+      
+    }else {
+      this.fetchPost();
     }
     
   }
@@ -70,22 +73,22 @@ export class BlogComponent implements OnInit {
     window.scrollTo(0,0)
   }
 
-  onCategoryPost(category: string, name: string) {
-    if (category === 'all') {
+  onCategoryPost(id: string, name: string) {
+    if (id === 'all') {
       this.fetchPost();
-      this.router.navigate(['/blog', name])
-      this.navLink = name;
+      this.router.navigate(['/blog', id])
+      this.navLink = id;
     } else {
-      this.postService.getPostsCategory(1, 4, category).subscribe((res) => {
+      this.postService.getPostsCategory(1, 4, id).subscribe((res) => {
         if (res.message === 'ok') {
-          console.log(res.data.posts);
 
-          this.router.navigate(['/blog', name])
+          this.router.navigate(['/blog', id])
           this.posts = res.data.posts;
-          this.currPage = +res.data.currPage;
-        this.nextPage = res.data.nextPage;
-        this.prevPage = res.data.prevPage;
-      this.navLink = name;
+          const convert = res.data.meta;
+          this.currPage = +convert.currPage;
+        this.nextPage = convert.nextPage;
+        this.prevPage = convert.prevPage;
+      this.navLink = id;
           
         }
       });
@@ -104,10 +107,11 @@ export class BlogComponent implements OnInit {
     if (!this.prevPage) return;
     this.postService.getPosts(this.currPage - 1, 4).subscribe((res) => {
       if (res.message === 'ok') {
+        const convert = res.data.meta;
         this.posts = res.data.posts;
-        this.currPage = +res.data.currPage;
-        this.nextPage = res.data.nextPage;
-        this.prevPage = res.data.prevPage;
+        this.currPage = +convert.currPage;
+        this.nextPage = convert.nextPage;
+        this.prevPage = convert.prevPage;
       }
     });
     window.scrollTo(0,100);
@@ -117,11 +121,11 @@ export class BlogComponent implements OnInit {
     if (!this.nextPage) return;
     this.postService.getPosts(this.currPage + 1, 4).subscribe((res) => {
       if (res.message === 'ok') {
-        
+        const convert = res.data.meta;
         this.posts = res.data.posts;
-        this.currPage = +res.data.currPage;
-        this.nextPage = res.data.nextPage;
-        this.prevPage = res.data.prevPage;
+        this.currPage = +convert.currPage;
+        this.nextPage = convert.nextPage;
+        this.prevPage = convert.prevPage;
       }
     });
     window.scrollTo(0,100);
@@ -130,8 +134,9 @@ export class BlogComponent implements OnInit {
   fetchPost() {
     this.postService.getPosts(this.currPage, 4).subscribe((res) => {
       if (res.message === 'ok') {
-        this.nextPage = res.data.nextPage;
-        this.prevPage = res.data.prevPage;
+        const convert = res.data.meta;
+        this.nextPage = convert.nextPage;
+        this.prevPage = convert.prevPage;
         this.posts = res.data.posts;
       }
     });

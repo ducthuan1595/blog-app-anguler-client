@@ -1,3 +1,4 @@
+import { CommentType } from "./comment.model";
 export interface ResponsePostType {
   _id: string;
   title: string;
@@ -18,15 +19,19 @@ export interface ResponsePostType {
     _id: string;
   };
   createdAt: Date;
+  comments?: CommentType[];
+  totalLiked?: number;
 }
 
 export interface ResponsePostPageType {
   posts: ResponsePostType[];
-  totalPage: number;
-  nextPage: boolean;
-  prevPage: boolean;
-  totalPosts: number;
-  currPage: number;
+  meta: {
+    totalPage: number;
+    nextPage: boolean;
+    prevPage: boolean;
+    totalPosts: number;
+    currPage: number;
+  }
 }
 
 export interface RequestPostType {
@@ -37,4 +42,5 @@ export interface RequestPostType {
   };
   desc: string;
   categoryId: string;
+
 }

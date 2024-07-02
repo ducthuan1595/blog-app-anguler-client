@@ -3,9 +3,10 @@ import {
   ResponsePostType,
   RequestPostType,
   ResponsePostPageType,
-} from './models/post.model';
+} from '../models/post.model';
 import { HttpClient } from '@angular/common/http';
 import { Router } from '@angular/router';
+import { URL_SERVER } from '../util/contant';
 
 export interface RequestPostTypeEdit extends RequestPostType {
   postId: string;
@@ -13,7 +14,7 @@ export interface RequestPostTypeEdit extends RequestPostType {
 
 @Injectable({ providedIn: 'root' })
 export class PostService {
-  URL = 'http://localhost:5000';
+  URL = URL_SERVER;
 
   constructor(private http: HttpClient, private router: Router) {}
 
@@ -23,30 +24,30 @@ export class PostService {
 
   getPosts(page: number, limit: number) {
     return this.http.get<{ message: string; data: ResponsePostPageType }>(
-      `${this.URL}/v1/api/posts?page=${page}&limit=${limit}`
+      `${this.URL}/v1/api/blog?page=${page}&limit=${limit}`
     );
   }
 
   getPostDetail(postId: string) {
     return this.http.get<{ message: string; data: ResponsePostType }>(
-      `${this.URL}/v1/api/post-detail?postId=${postId}`
+      `${this.URL}/v1/api/blog/detail-blog?blogId=${postId}`
     );
   }
 
   getPostsCategory(page: number, limit: number, categoryId: string) {
     return this.http.get<{ message: string; data: ResponsePostPageType }>(
-      `${this.URL}/v1/api/posts-category?page=${page}&limit=${limit}&categoryId=${categoryId}`
+      `${this.URL}/v1/api/blog/category?page=${page}&limit=${limit}&categoryId=${categoryId}`
     );
   }
   getPostUser(page: number, limit: number) {
     return this.http.get<{ message: string; data: ResponsePostPageType }>(
-      `${this.URL}/v1/api/posts-user?page=${page}&limit=${limit}`
+      `${this.URL}/v1/api/blog/user?page=${page}&limit=${limit}`
     );
   }
 
   createPost(data: RequestPostType) {
     this.http.post<{ message: string; data: ResponsePostType }>(
-      `${this.URL}/v1/api/create-post`,
+      `${this.URL}/v1/api/blog`,
       {
         ...data,
       }
@@ -60,7 +61,7 @@ export class PostService {
 
   editPost(data: RequestPostTypeEdit) {
     this.http.put<{ message: string; data: ResponsePostType }>(
-      `${this.URL}/v1/api/update-post`,
+      `${this.URL}/v1/api/blog`,
       {
         ...data,
       }
@@ -74,7 +75,9 @@ export class PostService {
 
   deletePost(id: string) {
     return this.http.delete<{ message: 'ok' }>(
-      `${this.URL}/v1/api/delete-post?postId=${id}`
+      `${this.URL}/v1/api/blog?postId=${id}`, {
+        body: id
+      }
     );
   }
 }

@@ -1,7 +1,8 @@
 import { Component, DoCheck, Input, OnInit } from '@angular/core';
 import { ResponsePostPageType, ResponsePostType } from '../../models/post.model';
-import { PostService } from '../../post.service';
-import { UserResponseType, AuthService } from '../../auth/auth.service';
+import { PostService } from '../../services/post.service';
+import { AuthService } from '../../services/auth.service';
+import { UserType } from '../../models/user.model';
 import { Router } from '@angular/router';
 
 @Component({
@@ -10,7 +11,7 @@ import { Router } from '@angular/router';
   styleUrl: './my-blogs.component.css'
 })
 export class MyBlogsComponent implements OnInit {
-  @Input() user!:UserResponseType;
+  @Input() user!:UserType;
   posts: ResponsePostType[];
 
   currPage = 1;
@@ -58,9 +59,10 @@ export class MyBlogsComponent implements OnInit {
     this.postService.getPosts(this.currPage - 1, 4).subscribe((res) => {
       if (res.message === 'ok') {
         this.posts = res.data.posts;
-        this.currPage = +res.data.currPage;
-        this.nextPage = res.data.nextPage;
-        this.prevPage = res.data.prevPage;
+        const convert = res.data.meta;
+        this.currPage = +convert.currPage;
+        this.nextPage = convert.nextPage;
+        this.prevPage = convert.prevPage;
       }
     });
   }
@@ -70,9 +72,10 @@ export class MyBlogsComponent implements OnInit {
       if (res.message === 'ok') {
         
         this.posts = res.data.posts;
-        this.currPage = +res.data.currPage;
-        this.nextPage = res.data.nextPage;
-        this.prevPage = res.data.prevPage;
+        const convert = res.data.meta;
+        this.currPage = +convert.currPage;
+        this.nextPage = convert.nextPage;
+        this.prevPage = convert.prevPage;
         window.scrollTo(0,0);
       }
     });
@@ -81,8 +84,9 @@ export class MyBlogsComponent implements OnInit {
   fetPosts() {
     this.postService.getPostUser(1, 4).subscribe(res => {      
       if(res.message === 'ok') {
-        this.prevPage = res.data.prevPage;
-        this.nextPage = res.data.nextPage;
+        const convert = res.data.meta;
+        this.prevPage = convert.prevPage;
+        this.nextPage = convert.nextPage;
         this.posts = res.data.posts;
         window.scrollTo(0,0);
       }

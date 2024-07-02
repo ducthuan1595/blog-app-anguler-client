@@ -10,7 +10,7 @@
         <a [class.active-nav]="navLink === 'all'" (click)="onCategoryPost('all', 'all')">All Posts</a>
       </div>
       <div class="category-item" *ngFor="let item of categories">
-        <a [class.active-nav]="navLink === item.name" (click)="onCategoryPost(item._id, item.name)">{{ item.name }}</a>
+        <a [class.active-nav]="navLink === item._id" (click)="onCategoryPost(item._id, item.name)">{{ item.name }}</a>
       </div>
     </div>
     <div class="col-4 d-flex justify-content-end">

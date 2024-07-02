@@ -204,3 +204,8 @@
   opacity: 0.7;
   ;
 }
+
+.blog-review:hover {
+  cursor: pointer;
+  opacity: 0.6;
+}

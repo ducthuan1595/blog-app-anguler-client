@@ -6,9 +6,9 @@ import {
   SimpleChanges,
 } from '@angular/core';
 import { NavigationExtras, Router } from '@angular/router';
-import { AuthService } from '../auth/auth.service';
+import { AuthService } from '../services/auth.service';
 import { User } from '../auth/user.model';
-import { PostService } from '../post.service';
+import { PostService } from '../services/post.service';
 import { ResponsePostType } from '../models/post.model';
 
 @Component({
@@ -28,7 +28,7 @@ export class SystemComponent implements OnInit, DoCheck {
     this.authService.getLoggedUser().subscribe((user) => {
       console.log(user);
       
-      if(user && user.user.role === 'F2') {
+      if(user && user.roleId.admin || user.roleId.moderator) {
         this.user = user;
       }
     });
@@ -69,7 +69,6 @@ export class SystemComponent implements OnInit, DoCheck {
   }
 
   onLogout() {
-    this.authService.logoutAd();
     this.user = null;
   }
 }

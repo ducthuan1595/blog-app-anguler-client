@@ -13,7 +13,7 @@ import { FooterComponent } from './footer/footer.component';
 import { DashboardComponent } from './system/dashboard/dashboard.component';
 import { BlogComponent } from './blog/blog.component';
 import { AuthGuard } from './auth-guard.service';
-import { AuthService } from './auth/auth.service';
+import { AuthService } from './services/auth.service';
 import { ManageComponent } from './system/manage/manage.component';
 import { AuthAdminComponent } from './system/auth/auth.component';
 import { AuthInterceptor } from './auth.interceptor.spec';

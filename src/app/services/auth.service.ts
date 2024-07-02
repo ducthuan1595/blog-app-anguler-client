@@ -2,28 +2,17 @@ import { HttpClient } from '@angular/common/http';
 import { EventEmitter, Injectable } from '@angular/core';
 import { BehaviorSubject, Observable } from 'rxjs';
 import { Router } from '@angular/router';
-
-export interface UserResponseType {
-  email: string;
-  username: string;
-  token?: string;
-  _id: string;
-  role: string;
-}
-
-export interface AuthResponseType {
-  user: UserResponseType;
-  token: string;
-}
+import { URL_SERVER } from '../util/contant';
+import { TokenType, UserType } from '../models/user.model';
 
 @Injectable({ providedIn: 'root' })
 export class AuthService {
-  URL = 'http://localhost:5000';
-  user: AuthResponseType;
+  URL = URL_SERVER;
+  user: UserType;
   isUser = false;
 
-  loggedUser: BehaviorSubject<AuthResponseType> =
-    new BehaviorSubject<AuthResponseType>(null);
+  loggedUser: BehaviorSubject<UserType> =
+    new BehaviorSubject<UserType>(null);
   logoutUser: EventEmitter<void> = new EventEmitter<void>();
 
   constructor(private http: HttpClient, private router: Router) {
@@ -38,7 +27,7 @@ export class AuthService {
       setTimeout(() => {
         
         if(this.loggedUser) {
-          if(!this.loggedUser || !this.loggedUser.value || this.loggedUser.value.user.role !== 'F2') {
+          if(!this.loggedUser || !this.loggedUser.value) {
             resolve(false)
           }
           const isAuth = !!this.loggedUser.value;
@@ -51,7 +40,7 @@ export class AuthService {
   }
 
   signup(email: string, password: string, username: string) {
-    return this.http.post<{ message: string }>(`${this.URL}/v2/api/signup`, {
+    return this.http.post<{ message: string }>(`${this.URL}/v1/api/auth/signup`, {
       email,
       password,
       username,
@@ -60,8 +49,8 @@ export class AuthService {
 
   login(email: string, password: string) {
     this.http
-      .post<{ message: string; data: AuthResponseType }>(
-        `${this.URL}/v2/api/login`,
+      .post<{ message: string; data: UserType; tokens: TokenType }>(
+        `${this.URL}/v1/api/auth/login`,
         {
           email,
           password,
@@ -70,6 +59,7 @@ export class AuthService {
       .subscribe((res) => {
         
         if (res.message === 'ok') {
+          localStorage.setItem('token_blog', JSON.stringify(res.tokens));
           localStorage.setItem('account_blog', JSON.stringify(res.data));
           this.loggedUser.next(res.data);
           this.router.navigate(['']);
@@ -78,41 +68,15 @@ export class AuthService {
       });
   }
 
-  loginAd(email: string, password: string) {
-    this.http
-      .post<{ message: string; data: AuthResponseType }>(
-        `${this.URL}/v2/api/login-auth`,
-        {
-          email,
-          password,
-        }
-      )
-      .subscribe(
-        (res) => {          
-          this.loggedUser.next(res.data);
-          this.router.navigate(['/system/dashboard']);
-        },
-        (err) => {
-          console.log(err);
-        }
-      );
-  }
-
   logout() {
-    localStorage.removeItem('account_blog');
+    // localStorage.removeItem('account_blog');
     
     this.router.navigate(['']);
     this.isUser = false;
     this.loggedUser.next(null);
   }
 
-  logoutAd() {
-    // this.loggedUser = null;
-    this.logoutUser.emit(null);
-    this.router.navigate(['/system']);
-  }
-
-  getLoggedUser(): Observable<AuthResponseType> {
+  getLoggedUser(): Observable<UserType> {
     return this.loggedUser.asObservable();
   }
 }

@@ -12,42 +12,16 @@
 
   <div class="container">
     <div class="row category">
-      <div class="col-4 wrap-box">
+      <div class="col-4 wrap-box" *ngFor="let category of categories">
         <img
-          src="https://static.wixstatic.com/media/37e2cda648dc4c508982e79d3432d016.jpeg/v1/fill/w_1225,h_690,fp_0.50_0.50,q_90,enc_auto/37e2cda648dc4c508982e79d3432d016.jpeg"
-          alt=""
+          [src]="category.image.url"
+          alt="category.name"
           class="box-img"
         />
         <div class="box box-1">
-          <a routerLink="/blog/lifestyle">
-            <div class="box-title">Lifestyle</div>
-            <div class="box-desc">Lifestyle from little things</div>
-          </a>
-        </div>
-      </div>
-      <div class="col-4 wrap-box">
-        <img
-          src="https://static.wixstatic.com/media/06874bade3274744bc70b6dd712869ab.jpg/v1/fill/w_1225,h_690,fp_0.50_0.50,q_90,enc_auto/06874bade3274744bc70b6dd712869ab.jpg"
-          class="box-img"
-          alt=""
-        />
-        <div class="box box-2">
-          <a routerLink="/blog/family">
-            <div class="box-title">Family</div>
-            <div class="box-desc">Songs for Sweet Dreams</div>
-          </a>
-        </div>
-      </div>
-      <div class="col-4 wrap-box">
-        <img
-          src="https://static.wixstatic.com/media/b4dde82e1c304a998ff61aec2774cea4.jpg/v1/fill/w_799,h_540,fp_0.50_0.50,lg_1,q_90,enc_auto/b4dde82e1c304a998ff61aec2774cea4.jpg"
-          class="box-img"
-          alt=""
-        />
-        <div class="box box-3">
-          <a routerLink="/blog/food">
-          <div class="box-title">Food</div>
-          <div class="box-desc">Fresh from Your Garden</div>
+          <a routerLink="/blog/{{category._id}}">
+            <div class="box-title">{{category.name}}</div>
+            <div class="box-desc">{{category.slogan}}</div>
           </a>
         </div>
       </div>
@@ -74,19 +48,19 @@
         <div class="inline"></div>
         <div class="footer-post">
           <div class="footer-post__first">
-            <div>
+            <div class="blog-review">
               <i class="fa-regular fa-eye"></i>
               <span>2</span>
             </div>
-            <div>
+            <div class="blog-review">
               <i class="fa-regular fa-message"></i>
-              <span>6</span>
+              <span>{{post.comments?.length}}</span>
             </div>
           </div>
           <div class="footer-post__last">
-            <div>
+            <div class="blog-review">
               <i class="fa-regular fa-heart"></i>
-              <span>2</span>
+              <span>{{post.totalLiked}}</span>
             </div>
           </div>
         </div>

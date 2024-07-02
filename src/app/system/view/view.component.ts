@@ -1,7 +1,7 @@
 import { Component, OnInit } from '@angular/core';
 import { ResponsePostType } from '../../models/post.model';
 import { Router } from '@angular/router';
-import { PostService } from '../../post.service';
+import { PostService } from '../../services/post.service';
 
 @Component({
   selector: 'app-view',

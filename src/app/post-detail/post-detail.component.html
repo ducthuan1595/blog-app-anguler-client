@@ -27,23 +27,39 @@
     <div class="inline"></div>
     <div class="footer-post">
       <div class="footer-post__first">
-        <div>
+        <div class="blog-review">
           <i class="fa-regular fa-eye"></i>
           <span>2</span>
         </div>
-        <div>
+        <div class="blog-review">
           <i class="fa-regular fa-message"></i>
-          <span>6</span>
+          <span>{{comments.length}}</span>
         </div>
       </div>
       <div class="footer-post__last">
-        <div>
+        <div class="blog-review">
           <i class="fa-regular fa-heart"></i>
-          <span>2</span>
+          <span>{{post?.totalLiked}}</span>
         </div>
       </div>
     </div>
   </div>
+
+  <!-- <div class="inline"></div> -->
+  <div>
+    
+  </div>
+
+  <div class="row comment">
+    <div class="col-12">
+      <h5>Comments</h5>
+      <div class="">
+        <input type="text" id="message" class="form-control" [(ngModel)]="commentValue" placeholder="Write a comment..." (keyup.enter)="addComment()" />
+      </div>
+    </div>
+  </div>
+
+
   <div class="relate-post">
     <h5>Relate Blogs</h5>
     <div class="row list-relate-post">
@@ -80,16 +96,8 @@
       </ul>
     </nav>
   </div>
-  <div class="inline"></div>
 
-  <div class="row comment">
-    <div class="col-12">
-      <h5>Comments</h5>
-      <div class="">
-        <input type="text" id="message" class="form-control" placeholder="Write a comment..." />
-      </div>
-    </div>
-  </div>
+  
 </div>
 
 <app-footer></app-footer>
