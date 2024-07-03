@@ -2,7 +2,7 @@ import { HttpClient } from '@angular/common/http';
 import { HttpParams } from '@angular/common/http';
 import { Injectable } from '@angular/core';
 import { URL_SERVER } from '../util/contant';
-import { CommentType, CreateCommentType, DeleteCommentType, GetCommentType } from '../models/comment.model';
+import { CommentAllType, CommentType, CreateCommentType, DeleteCommentType, GetCommentType } from '../models/comment.model';
 import { Observable } from 'rxjs';
 
 @Injectable({ providedIn: 'root' })
@@ -23,7 +23,7 @@ export class CommentService {
     });
   }
 
-  getComment(data: GetCommentType): Observable<{ message: string; data: CommentType[] }> {
+  getComment(data: GetCommentType): Observable<{ message: string; data: CommentType[]; code: number }> {
     let params = new HttpParams();
   
     params = params.set('blogId', data.blogId);
@@ -40,7 +40,7 @@ export class CommentService {
       params = params.set('offset', data.offset.toString());
     }
   
-    return this.http.get<{ message: string; data: CommentType[] }>(`${this.URL}/v1/api/comment`, { params });
+    return this.http.get<{ message: string; data: CommentType[]; code: number }>(`${this.URL}/v1/api/comment`, { params });
   }
   
 }

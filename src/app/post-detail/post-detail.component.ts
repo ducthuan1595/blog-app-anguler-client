@@ -5,7 +5,8 @@ import { ResponsePostPageType, ResponsePostType } from '../models/post.model';
 import { CommentService } from '../services/comment.service';
 import { AuthService } from '../services/auth.service';
 import { UserType } from '../models/user.model';
-import { CommentType } from '../models/comment.model';
+import { CommentType, CreateCommentType, GetCommentType, CommentAllType } from '../models/comment.model';
+import { covertDateToDMY } from '../util/formatDate';
 
 @Component({
   selector: 'app-post-detail',
@@ -15,15 +16,19 @@ import { CommentType } from '../models/comment.model';
 export class PostDetailComponent implements OnInit {
   post: ResponsePostType;
   posts: ResponsePostType[] = [];
-  comments: CommentType[] = [];
+  comments: CommentAllType[] = [];
   currPage: number = 1;
   nextPage: boolean;
   prevPage: boolean;
   user: UserType = null;
   commentValue = '';
+  commentId: string = '';
 
   changed = '';
   isChange = false;
+  isMore = false;
+  currentCommentPage = 1;
+  isMoreComment = true;
 
   constructor(private postService: PostService, private router: Router, private route: ActivatedRoute, private commentService: CommentService, private authService: AuthService) {}
 
@@ -34,11 +39,11 @@ export class PostDetailComponent implements OnInit {
       this.postService.getPostDetail(id).subscribe(res => {
         if(res.message === 'ok') {   
           let post = res.data;
-          this.getComment(post._id)
           this.post = post;
-
+          
           this.changed = id;
           this.isChange = false;
+          this.getComment();
         }
       });
       this.fetchData(categoryId, id);
@@ -71,6 +76,7 @@ export class PostDetailComponent implements OnInit {
   // }
 
   fetchData(categoryId: string, id:string) {
+    
     this.postService.getPostsCategory(1, 4, categoryId).subscribe(res => {
       if(res.message === 'ok') {
         this.posts = res.data.posts.filter(post => post._id.toString() !== id.toString())
@@ -81,11 +87,7 @@ export class PostDetailComponent implements OnInit {
   }
 
   formatDate(d: Date) {    
-    const date = new Date(d);
-    const day = date.getDay();
-    const month = date.getMonth() + 1;
-    const year = date.getFullYear();
-    return ` ${day >= 10 ? day : '0' + day}-${month + 1}-${year}`;
+    return covertDateToDMY(d);
   }
 
   onPrevPage() {
@@ -118,33 +120,87 @@ export class PostDetailComponent implements OnInit {
     window.scrollTo(0,0);
   }
 
-  getComment(blogId:string) {
-    const data = {
-      blogId,
-      parentCommentId: null,
-      limit: null,
-      offset: null
+  getComment() {    
+    let data = {
+        blogId: this.post._id,
+        parentCommentId: null,
+        limit: 2,
+        offset: this.currentCommentPage
     }
+    
     this.commentService.getComment(data).subscribe(res => {
       if(res.message === 'ok') {
-        this.comments = res.data;
+        if(res.data.length < 1) this.isMoreComment = false;
+        this.comments.push(...res.data);
+        // this.comments = res.data;
+        res.data.map(comment => {   
+          this.getParentComment(comment);
+        })
       }
     }) 
   }
 
-  addComment() {
-    if(!this.user) this.router.navigate(['auth']); 
-    const data = {
-      blogId: this.post._id,
-      userId: this.user._id,
-      content: this.commentValue,
+  getParentComment(comment: CommentType) {        
+    let data = {
+        blogId: this.post._id,
+        parentCommentId: comment._id,
+        limit: null,
+        offset: null
     }
-    this.commentService.createComment(data).subscribe(res => {
+
+    this.commentService.getComment(data).subscribe(res => {
       if(res.message === 'ok') {
-        this.comments.unshift(res.data)
+
+        for(let i of this.comments) {
+          if(i._id === comment._id) {
+            i.replies = res.data
+          }
+        }
+       
       }
-    })
-    
+    }) 
   }
 
+  addComment(parentCommentId: string | null, index: number | null) {
+    if(!this.user) this.router.navigate(['auth']);
+    let data: CreateCommentType;
+    if(parentCommentId) {
+      data = {
+        blogId: this.post._id,
+        userId: this.user._id,
+        content: this.commentValue,
+        parentCommentId
+      }
+    }else {
+      data = {
+        blogId: this.post._id,
+        userId: this.user._id,
+        content: this.commentValue,
+      }
+    }
+
+    this.commentService.createComment(data).subscribe(res => {
+      if(res.message === 'ok') {
+        if(!parentCommentId) {
+          return this.comments.unshift(res.data);
+        }
+        this.comments[index].replies.unshift(res.data);
+      }
+    })
+    this.commentValue = '';
+    this.commentId = ''
+  }
+
+  onReply(commentId: string) {    
+    this.commentId = commentId;
+  }
+
+  showMore() {
+    this.isMore = true;
+  }
+
+  onShowMoreComment() {    
+    ++this.currentCommentPage;
+    this.getComment();
+  }
 }

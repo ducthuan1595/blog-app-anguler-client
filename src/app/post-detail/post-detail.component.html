@@ -12,7 +12,7 @@
     <div class="" *ngIf="post">
       <div class="author">
         <img
-          src="https://t4.ftcdn.net/jpg/05/49/98/39/360_F_549983970_bRCkYfk0P6PP5fKbMhZMIb07mCJ6esXL.jpg"
+          [src]="post.userId?.avatar ? post.userId.avatar : 'https://t4.ftcdn.net/jpg/05/49/98/39/360_F_549983970_bRCkYfk0P6PP5fKbMhZMIb07mCJ6esXL.jpg'"
           alt="avatar"
         />
         <div class="info">
@@ -46,15 +46,71 @@
   </div>
 
   <!-- <div class="inline"></div> -->
-  <div>
-    
-  </div>
+  <ul class="list-comment">
+    <li class="comment-content" *ngFor="let comment of comments; let index = index">
+      <div class="comment-content__main">
+        <img
+          [src]="comment.userId?.avatar ? comment.userId.avatar : 'https://t4.ftcdn.net/jpg/05/49/98/39/360_F_549983970_bRCkYfk0P6PP5fKbMhZMIb07mCJ6esXL.jpg'"
+          alt="avatar"
+        />
+
+        <div>{{comment.content}}</div>
+      </div>
+      <div class="comment-content__day fs-6">
+        <span><i class="far fa-calendar"></i> {{ formatDate(comment.createdAt) }}</span>
+        <div>
+          <p>
+            <button (click)="onReply(comment._id)" class="btn fs-6" type="button" data-bs-toggle="collapse" [data-bs-target]="'#' + comment._id" aria-expanded="true" [aria-controls]="comment._id">
+              Reply
+            </button>
+          </p>
+          <div class="" *ngIf="commentId === comment._id">
+            <input class="p-2 mb-4 w-100" placeholder="Write a comment..." [(ngModel)]="commentValue" (keyup.enter)="addComment(comment._id)" />
+          </div>        
+        </div>
+      </div>
+      <div *ngIf="comment.replies?.length > 0">
+        <button (click)="showMore()" *ngIf="!isMore" class="btn ms-5 fw-bold">View {{comment.replies?.length}} replies</button>
+        <ul *ngIf="isMore" class="ms-5 list-comment">
+            <li class="comment-content" *ngFor="let item of comment.replies; let i = index">
+              <div class="comment-content__main">
+                <img
+                  class="avatar-child"
+                  [src]="comment.userId?.avatar ? comment.userId.avatar : 'https://t4.ftcdn.net/jpg/05/49/98/39/360_F_549983970_bRCkYfk0P6PP5fKbMhZMIb07mCJ6esXL.jpg'"
+                  alt="avatar"
+                />
+                <div>{{item.content}}</div>
+              </div>
+              <div class="comment-content__day fs-6">
+                <span><i class="far fa-calendar"></i> {{ formatDate(item.createdAt) }}</span>
+                <div>
+                  <p>
+                    <button (click)="onReply(item._id)" class="btn fs-6" type="button" data-bs-toggle="collapse" [data-bs-target]="'#' + comment._id" aria-expanded="true" [aria-controls]="comment._id">
+                      Reply
+                    </button>
+                  </p>
+                  <div class="" *ngIf="commentId === item._id">
+                    <input class="p-2 mb-4 w-100" placeholder="Write a comment..." [(ngModel)]="commentValue" (keyup.enter)="addComment(comment._id, index)" />
+                  </div>        
+                </div>
+              </div>
+              <div *ngIf="i < comment.replies.length - 1" class="inline"></div>
+            </li>
+        </ul>
+      </div>
+      <div class="inline"></div>
+    </li>
+
+    <div>
+      <button (click)="onShowMoreComment()" *ngIf="isMoreComment" class="btn fs-6">See more...</button>
+    </div>
+  </ul>
 
   <div class="row comment">
     <div class="col-12">
       <h5>Comments</h5>
       <div class="">
-        <input type="text" id="message" class="form-control" [(ngModel)]="commentValue" placeholder="Write a comment..." (keyup.enter)="addComment()" />
+        <input type="text" id="message" class="form-control" [(ngModel)]="commentValue" placeholder="Write a comment..." (keyup.enter)="addComment(null, null)" />
       </div>
     </div>
   </div>
