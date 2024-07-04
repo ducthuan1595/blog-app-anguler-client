@@ -63,6 +63,7 @@ export class AuthInterceptor implements HttpInterceptor {
       (req.url.includes('/v1/api/blog/user') && req.method === 'GET') ||
       (req.url.includes('/v1/api/blog') && req.method === 'PUT') ||
       (req.url.includes('/v1/api/blog') && req.method === 'DELETE') ||
+      (req.url.includes('/v1/api/like') && req.method === 'GET') ||
       (req.url.includes('/v1/api/like') && req.method === 'POST') 
       // req.url.includes('/v1/api/update-post') ||
       // req.url.includes('/v1/api/delete-post') ||

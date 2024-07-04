@@ -1,4 +1,6 @@
 import { Component, DoCheck, Input, OnInit } from '@angular/core';
+import { finalize } from 'rxjs';
+
 import { ResponsePostPageType, ResponsePostType } from '../../models/post.model';
 import { PostService } from '../../services/post.service';
 import { AuthService } from '../../services/auth.service';
@@ -20,11 +22,12 @@ export class MyBlogsComponent implements OnInit {
   nextPage: boolean;
   isPopup = '';
   isOpen = false;
+  isLoading = false;
 
   constructor(private postService: PostService, private router: Router) {}
 
   ngOnInit(): void {
-    console.log(this.user);
+    this.isLoading = true
     
     if(!this.user) {
       this.router.navigate(['auth']);
@@ -52,7 +55,10 @@ export class MyBlogsComponent implements OnInit {
   }
 
   onDelete(id: string) {
-    this.postService.deletePost(id).subscribe(res => {
+    this.isLoading = true;
+    this.postService.deletePost(id).pipe(
+      finalize(() => this.isLoading = false)
+    ).subscribe(res => {
       if(res.message === 'ok') {
         const cpPost = [...this.posts];
         this.posts = cpPost.filter(post => post._id.toString() !== id.toString());
@@ -61,7 +67,10 @@ export class MyBlogsComponent implements OnInit {
   }
   onPrevPage() {
     if (!this.prevPage) return;
-    this.postService.getPosts(this.currPage - 1, 4).subscribe((res) => {
+    this.isLoading = true;
+    this.postService.getPosts(this.currPage - 1, 4).pipe(
+      finalize(() => this.isLoading = false)
+    ).subscribe((res) => {
       if (res.message === 'ok') {
         this.posts = res.data.posts;
         const convert = res.data.meta;
@@ -73,7 +82,10 @@ export class MyBlogsComponent implements OnInit {
   }
   onNextPage() {
     if (!this.nextPage) return;
-    this.postService.getPosts(this.currPage + 1, 4).subscribe((res) => {
+    this.isLoading = true;
+    this.postService.getPosts(this.currPage + 1, 4).pipe(
+      finalize(() => this.isLoading = false)
+    ).subscribe((res) => {
       if (res.message === 'ok') {
         
         this.posts = res.data.posts;
@@ -87,7 +99,10 @@ export class MyBlogsComponent implements OnInit {
   }
 
   fetPosts() {
-    this.postService.getPostUser(1, 4).subscribe(res => {      
+    this.isLoading = true;
+    this.postService.getPostUser(1, 4).pipe(
+      finalize(() => this.isLoading = false)
+    ).subscribe(res => {      
       if(res.message === 'ok') {
         const convert = res.data.meta;
         this.prevPage = convert.prevPage;

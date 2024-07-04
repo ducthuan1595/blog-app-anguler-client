@@ -30,6 +30,8 @@ export class SystemComponent implements OnInit {
       
       if(user && user.roleId.admin || user.roleId.moderator) {
         this.user = user;
+      }else {
+        this.router.navigate(['/']);
       }
     });
     this.authService.logoutUser.subscribe(() => {
@@ -61,6 +63,6 @@ export class SystemComponent implements OnInit {
   }
 
   onLogout() {
-    this.user = null;
+    this.authService.logout();
   }
 }

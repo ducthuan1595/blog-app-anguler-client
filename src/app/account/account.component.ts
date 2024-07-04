@@ -14,16 +14,13 @@ export class AccountComponent implements OnInit {
   constructor(private authService: AuthService, private route: ActivatedRoute) {};
 
   ngOnInit(): void {
-    this.authService.getLoggedUser().subscribe(res => {
-      console.log(res, '///////////////////');
-      
+    this.authService.getLoggedUser().subscribe(res => {      
       this.user = res;
     })
     
   }
 
   onLogout() {   
-    console.log('loutgout');
      
     this.authService.logout();
   }

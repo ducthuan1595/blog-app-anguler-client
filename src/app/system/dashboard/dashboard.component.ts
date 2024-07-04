@@ -2,6 +2,7 @@ import { Component, OnInit } from '@angular/core';
 import { PostService } from '../../services/post.service';
 import { ResponsePostType } from '../../models/post.model';
 import { NavigationExtras, Router } from '@angular/router';
+import { covertDateToDMY } from '../../util/formatDate';
 
 @Component({
   selector: 'app-dashboard',
@@ -51,11 +52,7 @@ export class DashboardComponent implements OnInit {
   }
 
   formatDate(d: Date) {
-    const date = new Date(d);
-    const day = date.getDay();
-    const month = date.getMonth() + 1;
-    const year = date.getFullYear();
-    return ` ${day >= 10 ? day : '0' + day}/${month + 1}/${year}`;
+    return covertDateToDMY(d)
   }
 
   onPrevPage() {

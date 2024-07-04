@@ -1,6 +1,6 @@
 import { HttpClient } from '@angular/common/http';
 import { EventEmitter, Injectable } from '@angular/core';
-import { BehaviorSubject, Observable } from 'rxjs';
+import { BehaviorSubject, Observable, finalize } from 'rxjs';
 import { Router } from '@angular/router';
 import { URL_SERVER } from '../util/contant';
 import { TokensType, UserType } from '../models/user.model';
@@ -52,7 +52,7 @@ export class AuthService {
   }
 
   login(email: string, password: string) {
-    this.http
+    return this.http
       .post<{ message: string; data: UserType; tokens: TokensType }>(
         `${this.URL}/v1/api/auth/login`,
         {
@@ -60,17 +60,6 @@ export class AuthService {
           password,
         }
       )
-      .subscribe((res) => {
-        
-        if (res.message === 'ok') {
-          localStorage.setItem('token_blog', JSON.stringify(res.tokens));
-          localStorage.setItem('account_blog', JSON.stringify(res.data));
-          this.loggedUser.next(res.data);
-          this.loggedTokens.next(res.tokens);
-          this.router.navigate(['']);
-          this.isUser = true;
-        }
-      });
   }
 
   logout() {

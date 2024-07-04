@@ -20,7 +20,7 @@ export class PostService {
   constructor(private http: HttpClient, private router: Router) {}
 
   searchPost(key:string) {
-    return this.http.get<{message: string; data: ResponsePostType[]}>(`${this.URL}/v1/api/search?search=${key}`);
+    return this.http.get<{message: string; data: ResponsePostType[]}>(`${this.URL}/v1/api/blog/search?keyword=${key}`);
   }
 
   getPosts(page: number, limit: number) {

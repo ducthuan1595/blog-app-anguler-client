@@ -1,4 +1,5 @@
 import { Component, DoCheck, Input, OnChanges, OnInit, SimpleChanges } from '@angular/core';
+import { finalize } from 'rxjs/operators';
 import { PostService } from '../services/post.service';
 import { ActivatedRoute, Router } from '@angular/router';
 import { ResponsePostPageType, ResponsePostType } from '../models/post.model';
@@ -27,6 +28,7 @@ export class PostDetailComponent implements OnInit, OnChanges {
   commentId: string = '';
   commentLength = 0;
   liked = 0;
+  isLoading = false;
 
   isMore = false;
   currentCommentPage = 1;
@@ -37,6 +39,7 @@ export class PostDetailComponent implements OnInit, OnChanges {
   constructor(private postService: PostService, private router: Router, private route: ActivatedRoute, private commentService: CommentService, private authService: AuthService, private likedService: LikeService) {}
 
   ngOnInit(): void {
+    this.isLoading = true
     this.route.paramMap.subscribe(params => {
       this.comments = [];
       this.currPage = 1;
@@ -78,7 +81,9 @@ export class PostDetailComponent implements OnInit, OnChanges {
 
   fetchDataCategory(categoryId: string, id:string) {
     
-    this.postService.getPostsCategory(1, 4, categoryId).subscribe(res => {
+    this.postService.getPostsCategory(1, 4, categoryId).pipe(
+      finalize(() => this.isLoading = false)
+    ).subscribe(res => {
       if(res.message === 'ok') {
         this.posts = res.data.posts.filter(post => post._id.toString() !== id.toString())
         this.nextPage = res.data.meta.nextPage;

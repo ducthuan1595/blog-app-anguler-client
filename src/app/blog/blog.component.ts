@@ -1,4 +1,5 @@
 import { Component, OnInit } from '@angular/core';
+import { finalize } from 'rxjs/operators';
 import { ActivatedRoute, Params, Router } from '@angular/router';
 import { PostService } from '../services/post.service';
 import { ResponsePostType } from '../models/post.model';
@@ -8,6 +9,7 @@ import {
   ManageService,
   ResCategoryType,
 } from '../services/manage.service';
+import { covertDateToDMY } from '../util/formatDate';
 
 @Component({
   selector: 'app-blog',
@@ -22,6 +24,7 @@ export class BlogComponent implements OnInit {
   nextPage: boolean;
   prevPage: boolean;
   navLink = 'all';
+  isLoading = false;
 
   constructor(
     private router: Router,
@@ -32,7 +35,7 @@ export class BlogComponent implements OnInit {
   ) {}
 
   ngOnInit(): void {
-    
+    this.isLoading = true;
     this.authService.getLoggedUser().subscribe((res) => {
       if(res) {
         this.user = res;
@@ -47,7 +50,9 @@ export class BlogComponent implements OnInit {
     const currentRouteUrl = this.router.url.split('/')[2];
     
     if(currentRouteUrl) {
-        this.postService.getPostsCategory(1, 4, currentRouteUrl).subscribe(res => {
+        this.postService.getPostsCategory(1, 4, currentRouteUrl).pipe(
+          finalize(() => this.isLoading = false)
+        ).subscribe(res => {
           if(res.message === 'ok') {      
             this.navLink = currentRouteUrl;
             this.posts = res.data.posts;
@@ -79,7 +84,10 @@ export class BlogComponent implements OnInit {
       this.router.navigate(['/blog', id])
       this.navLink = id;
     } else {
-      this.postService.getPostsCategory(1, 4, id).subscribe((res) => {
+      this.isLoading = true;
+      this.postService.getPostsCategory(1, 4, id).pipe(
+        finalize(() => this.isLoading = false)
+      ).subscribe((res) => {
         if (res.message === 'ok') {
 
           this.router.navigate(['/blog', id])
@@ -96,16 +104,15 @@ export class BlogComponent implements OnInit {
   }
 
   formatDate(d: Date) {
-    const date = new Date(d);
-    const day = date.getDay();
-    const month = date.getMonth() + 1;
-    const year = date.getFullYear();
-    return ` ${day >= 10 ? day : '0' + day}-${month + 1}-${year}`;
+    return covertDateToDMY(d)
   }
 
   onPrevPage() {
     if (!this.prevPage) return;
-    this.postService.getPosts(this.currPage - 1, 4).subscribe((res) => {
+    this.isLoading = true;
+    this.postService.getPosts(this.currPage - 1, 4).pipe(
+      finalize(() => this.isLoading = false)
+    ).subscribe((res) => {
       if (res.message === 'ok') {
         const convert = res.data.meta;
         this.posts = res.data.posts;
@@ -117,9 +124,11 @@ export class BlogComponent implements OnInit {
     window.scrollTo(0,100);
   }
   onNextPage() {
-
+    this.isLoading = true;
     if (!this.nextPage) return;
-    this.postService.getPosts(this.currPage + 1, 4).subscribe((res) => {
+    this.postService.getPosts(this.currPage + 1, 4).pipe(
+      finalize(() => this.isLoading = false)
+    ).subscribe((res) => {
       if (res.message === 'ok') {
         const convert = res.data.meta;
         this.posts = res.data.posts;
@@ -132,7 +141,10 @@ export class BlogComponent implements OnInit {
   }
 
   fetchPost() {
-    this.postService.getPosts(this.currPage, 4).subscribe((res) => {
+    this.isLoading = true;
+    this.postService.getPosts(this.currPage, 4).pipe(
+      finalize(() => this.isLoading = false)
+    ).subscribe((res) => {
       if (res.message === 'ok') {
         const convert = res.data.meta;
         this.nextPage = convert.nextPage;
