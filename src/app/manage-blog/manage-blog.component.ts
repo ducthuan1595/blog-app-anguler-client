@@ -83,6 +83,7 @@ export class ManageBlogComponent implements OnInit {
   }
 
   onSubmit(form: NgForm) {
+    
     if (!form.valid || !this.userClient) {
       return this.errMessage = 'The fields are not empty!'
     }
@@ -98,12 +99,20 @@ export class ManageBlogComponent implements OnInit {
 
     if (this.isEdit && this.postId) {
       this.postService
-        .editPost({ ...data, postId: this.postId });
+        .editPost({ ...data, postId: this.postId }).subscribe(res => {
+          if(res.message === 'ok') {
+            this.postService.getPosts(1, 4);
+            this.router.navigate(['blog'])
+          }
+        })
     } else {
-      this.postService.createPost(data)
+      this.postService.createPost(data).subscribe(res => {
+        if(res.message === 'ok') {
+          this.postService.getPosts(1, 4);
+          form.reset();
+          this.router.navigate(['blog']);
+        }
+      })
     }
-    this.postService.getPosts(1, 4);
-    form.reset();
-    this.router.navigate(['blog']);
   }
 }

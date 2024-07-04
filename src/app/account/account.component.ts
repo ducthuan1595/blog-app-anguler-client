@@ -15,14 +15,16 @@ export class AccountComponent implements OnInit {
 
   ngOnInit(): void {
     this.authService.getLoggedUser().subscribe(res => {
+      console.log(res, '///////////////////');
+      
       this.user = res;
     })
-    const slug = this.route.snapshot.paramMap.get('slug');
-    console.log(slug);
     
   }
 
-  onLogout() {    
+  onLogout() {   
+    console.log('loutgout');
+     
     this.authService.logout();
   }
 }

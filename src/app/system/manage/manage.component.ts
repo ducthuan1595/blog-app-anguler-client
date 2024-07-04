@@ -3,6 +3,7 @@ import { UploadCloudinary } from '../../services/uploadFile.service';
 import { ManageService, ResCategoryType } from '../../services/manage.service';
 import { AuthService } from '../../services/auth.service';
 import { NgForm } from '@angular/forms';
+import { covertDateToDMY } from '../../util/formatDate';
 
 @Component({
   selector: 'app-manage',
@@ -116,10 +117,6 @@ export class ManageComponent implements OnInit {
   }
 
   formatDate(d: Date) {
-    const date = new Date(d);
-    const day = date.getDay();
-    const month = date.getMonth() + 1;
-    const year = date.getFullYear();
-    return ` ${day >= 10 ? day : '0' + day}/${month + 1}/${year}`;
+    return covertDateToDMY(d)
   }
 }

@@ -16,7 +16,7 @@ import { ResponsePostType } from '../models/post.model';
   templateUrl: './system.component.html',
   styleUrl: './system.component.css',
 })
-export class SystemComponent implements OnInit, DoCheck {
+export class SystemComponent implements OnInit {
   user = null;
   searchValue = '';
   isPopup = false;
@@ -37,14 +37,6 @@ export class SystemComponent implements OnInit, DoCheck {
     });
   }
 
-  ngDoCheck(): void {
-    const currURL = this.router.url.split('/')[2];
-    if(currURL == 'dashboard') {
-      this.isForm = true;
-    }else {
-      this.isForm = false;
-    }
-  }
 
   onSearch() {
     if(this.searchValue) {

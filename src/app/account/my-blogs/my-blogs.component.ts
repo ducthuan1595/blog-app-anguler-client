@@ -4,6 +4,7 @@ import { PostService } from '../../services/post.service';
 import { AuthService } from '../../services/auth.service';
 import { UserType } from '../../models/user.model';
 import { Router } from '@angular/router';
+import { covertDateToDMY } from '../../util/formatDate';
 
 @Component({
   selector: 'app-my-blogs',
@@ -23,6 +24,12 @@ export class MyBlogsComponent implements OnInit {
   constructor(private postService: PostService, private router: Router) {}
 
   ngOnInit(): void {
+    console.log(this.user);
+    
+    if(!this.user) {
+      this.router.navigate(['auth']);
+      return;
+    }
     this.fetPosts();
   }
 
@@ -33,15 +40,13 @@ export class MyBlogsComponent implements OnInit {
   }
 
   formatDate(d: Date) {
-    const date = new Date(d);
-    const day = date.getDay();
-    const month = date.getMonth() + 1;
-    const year = date.getFullYear();
-    return ` ${day >= 10 ? day : '0' + day}-${month + 1}-${year}`;
+    return covertDateToDMY(d)
   }
+
   onDetail(id: string, category:string) {
     this.router.navigate(['/blog-detail', id, category]);
   }
+
   onEdit(id: string) {
     this.router.navigate(['manage-blog', id])
   }

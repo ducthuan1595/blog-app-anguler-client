@@ -3,6 +3,7 @@ import {
   ResponsePostType,
   RequestPostType,
   ResponsePostPageType,
+  ResponseFavoritePostPageType,
 } from '../models/post.model';
 import { HttpClient } from '@angular/common/http';
 import { Router } from '@angular/router';
@@ -28,6 +29,12 @@ export class PostService {
     );
   }
 
+  getFavoritePosts() {
+    return this.http.get<{ message: string; data: any }>(
+      `${this.URL}/v1/api/blog/favorite`
+    );
+  }
+
   getPostDetail(postId: string) {
     return this.http.get<{ message: string; data: ResponsePostType }>(
       `${this.URL}/v1/api/blog/detail-blog?blogId=${postId}`
@@ -46,38 +53,26 @@ export class PostService {
   }
 
   createPost(data: RequestPostType) {
-    this.http.post<{ message: string; data: ResponsePostType }>(
+    return this.http.post<{ message: string; data: ResponsePostType }>(
       `${this.URL}/v1/api/blog`,
       {
         ...data,
       }
-    ).subscribe(res => {
-      if(res.message === 'ok') {
-        this.getPosts(1, 4);
-        this.router.navigate(['blog'])
-      }
-    })
+    )
   }
 
   editPost(data: RequestPostTypeEdit) {
-    this.http.put<{ message: string; data: ResponsePostType }>(
+    return this.http.put<{ message: string; data: ResponsePostType }>(
       `${this.URL}/v1/api/blog`,
       {
         ...data,
       }
-    ).subscribe(res => {
-      if(res.message === 'ok') {
-        this.getPosts(1, 4);
-        this.router.navigate(['blog'])
-      }
-    })
+    )
   }
 
   deletePost(id: string) {
     return this.http.delete<{ message: 'ok' }>(
-      `${this.URL}/v1/api/blog?postId=${id}`, {
-        body: id
-      }
+      `${this.URL}/v1/api/blog?blogId=${id}`
     );
   }
 }

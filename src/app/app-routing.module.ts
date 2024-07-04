@@ -7,7 +7,6 @@ import { DashboardComponent } from './system/dashboard/dashboard.component';
 import { BlogComponent } from './blog/blog.component';
 import { AuthGuard } from './auth-guard.service';
 import { ManageComponent } from './system/manage/manage.component';
-import { AuthAdminComponent } from './system/auth/auth.component';
 import { ManageBlogComponent } from './manage-blog/manage-blog.component';
 import { PostDetailComponent } from './post-detail/post-detail.component';
 import { AccountComponent } from './account/account.component';
@@ -54,10 +53,6 @@ const appRoutes: Routes = [
     children: [
       {
         path: '',
-        component: AuthAdminComponent,
-      },
-      {
-        path: 'dashboard',
         component: DashboardComponent,
         canActivate: [AuthGuard],
       },

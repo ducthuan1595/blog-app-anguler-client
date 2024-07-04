@@ -9,14 +9,9 @@ export class LikeService {
   constructor(private http: HttpClient) {}
 
   liked (blogId: string) {
-    return this.http.post<{message: string, data: number}>(`${this.URL}/like`, {
-      body: blogId
+    return this.http.post<{message: string, data: number}>(`${this.URL}/v1/api/like`, {
+      blogId
     });
   }
 
-  unlike (blogId: string) {
-    return this.http.delete<{message: string, data: number}>(`${this.URL}/like`, {
-      body: blogId
-    });
-  }
 }

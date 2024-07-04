@@ -7,6 +7,7 @@ import { CommentService } from '../services/comment.service';
 import { CommentType } from '../models/comment.model';
 import { covertDateToDMY } from '../util/formatDate';
 import { forkJoin } from 'rxjs';
+import { LikeService } from '../services/like.service';
 
 @Component({
   selector: 'app-home',
@@ -16,36 +17,27 @@ import { forkJoin } from 'rxjs';
 export class HomeComponent implements OnInit {
   posts: ResponsePostType[] = [];
   categories: ResCategoryType[] = [];
-  currPage: number = 1;
-  nextPage: boolean;
-  prevPage: boolean;
 
-  constructor(private postService: PostService, private router: Router, private categoryService: ManageService, private commentService: CommentService) {}
+  liked = 0;
+
+  constructor(private postService: PostService, private router: Router, private categoryService: ManageService, private commentService: CommentService, private likeService: LikeService) {}
 
   ngOnInit(): void {
-    this.postService.getPosts(this.currPage, 2).subscribe(async(res) => {
-      if (res.message === 'ok') {
-        this.nextPage = res.data.meta.nextPage;
-        this.prevPage = res.data.meta.prevPage;
-
-        const posts = res.data.posts.map((post) => {
-            const data = {
-              blogId: post._id,
-              parentCommentId: null,
-              limit: null,
-              offset: null
-            }
-            this.commentService.getComment(data).subscribe(res => {
+    this.postService.getFavoritePosts().subscribe(async(res) => {
+      if (res.message === 'ok') {   
+        const posts = res.data.map((post) => {
+          const blog = JSON.parse(post);
+          this.commentService.getLengthComment(blog._id).subscribe(res => {
               if(res.message === 'ok') {
-                post.comments = res.data
+                blog.comments = res.data
               }
             }) 
             
-            return post;
+            return blog;
         })
         
+    console.log(posts);
     
-        console.log(posts);
         this.posts = posts;
       }
     });
@@ -68,49 +60,11 @@ export class HomeComponent implements OnInit {
     window.scrollTo(0,0);
   }
 
-  onPrevPage() {
-    if (!this.prevPage) return;
-    this.postService.getPosts(this.currPage - 1, 2).subscribe((res) => {
-      if (res.message === 'ok') {
-        this.posts = res.data.posts;
-        this.currPage = +res.data.meta.currPage;
-        this.nextPage = res.data.meta.nextPage;
-        this.prevPage = res.data.meta.prevPage;
-      }
-    });
-    window.scrollTo(0,1000);
-  }
-  onNextPage() {
-    if (!this.nextPage) return;
-    this.postService.getPosts(this.currPage + 1, 2).subscribe((res) => {
-      if (res.message === 'ok') {
-        this.posts = res.data.posts;
-        this.currPage = +res.data.meta.currPage;
-        this.nextPage = res.data.meta.nextPage;
-        this.prevPage = res.data.meta.prevPage;
-      }
-    });
-    window.scrollTo(0,1000);
-  }
-
-  onDetail(id: string, category:string) {    
+  onDetail(id: string, category:string) {   
+    console.log(id, category);
+     
     this.router.navigate(['/blog-detail', id, category]);
     window.scrollTo(0,0);
   }
 
-  getCommentBlog(blogId: string):any {
-    const data = {
-      blogId,
-      parentCommentId: null,
-      limit: null,
-      offset: null
-    }
-    this.commentService.getComment(data).subscribe(res => {
-      if(res.message === 'ok') {
-        console.log('comment', res.data);
-        
-        return res.data
-      }
-    })
-  }
 }

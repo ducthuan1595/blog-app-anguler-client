@@ -15,7 +15,6 @@ import { BlogComponent } from './blog/blog.component';
 import { AuthGuard } from './auth-guard.service';
 import { AuthService } from './services/auth.service';
 import { ManageComponent } from './system/manage/manage.component';
-import { AuthAdminComponent } from './system/auth/auth.component';
 import { AuthInterceptor } from './auth.interceptor.spec';
 import { ManageBlogComponent } from './manage-blog/manage-blog.component';
 import { PostDetailComponent } from './post-detail/post-detail.component';
@@ -29,7 +28,6 @@ import { ViewComponent } from './system/view/view.component';
     AppComponent,
     SystemComponent,
     AuthComponent,
-    AuthAdminComponent,
     HeaderComponent,
     HomeComponent,
     FooterComponent,

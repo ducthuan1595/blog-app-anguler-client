@@ -33,13 +33,13 @@
         </div>
         <div class="blog-review">
           <i class="fa-regular fa-message"></i>
-          <span>{{comments.length}}</span>
+          <span>{{commentLength}}</span>
         </div>
       </div>
       <div class="footer-post__last">
-        <div class="blog-review">
+        <div class="blog-review" (click)="onLiked(post._id)">
           <i class="fa-regular fa-heart"></i>
-          <span>{{post?.totalLiked}}</span>
+          <span>{{liked}}</span>
         </div>
       </div>
     </div>
@@ -102,7 +102,7 @@
     </li>
 
     <div>
-      <button (click)="onShowMoreComment()" *ngIf="isMoreComment" class="btn fs-6">See more...</button>
+      <button (click)="onShowMoreComment()" *ngIf="isMoreComment" class="btn fs-6 fw-bold">See more...</button>
     </div>
   </ul>
 

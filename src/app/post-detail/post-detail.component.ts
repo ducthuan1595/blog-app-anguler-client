@@ -7,13 +7,15 @@ import { AuthService } from '../services/auth.service';
 import { UserType } from '../models/user.model';
 import { CommentType, CreateCommentType, GetCommentType, CommentAllType } from '../models/comment.model';
 import { covertDateToDMY } from '../util/formatDate';
+import { BehaviorSubject } from 'rxjs';
+import { LikeService } from '../services/like.service';
 
 @Component({
   selector: 'app-post-detail',
   templateUrl: './post-detail.component.html',
   styleUrl: './post-detail.component.css'
 })
-export class PostDetailComponent implements OnInit {
+export class PostDetailComponent implements OnInit, OnChanges {
   post: ResponsePostType;
   posts: ResponsePostType[] = [];
   comments: CommentAllType[] = [];
@@ -23,59 +25,58 @@ export class PostDetailComponent implements OnInit {
   user: UserType = null;
   commentValue = '';
   commentId: string = '';
+  commentLength = 0;
+  liked = 0;
 
-  changed = '';
-  isChange = false;
   isMore = false;
   currentCommentPage = 1;
   isMoreComment = true;
+  private blogDetailSubject = new BehaviorSubject<any>(null);
+  blogDetailObservable$ = this.blogDetailSubject.asObservable();
 
-  constructor(private postService: PostService, private router: Router, private route: ActivatedRoute, private commentService: CommentService, private authService: AuthService) {}
+  constructor(private postService: PostService, private router: Router, private route: ActivatedRoute, private commentService: CommentService, private authService: AuthService, private likedService: LikeService) {}
 
   ngOnInit(): void {
-    const id = this.route.snapshot.paramMap.get('id');    
-    const categoryId = this.route.snapshot.paramMap.get('categoryId');    
+    this.route.paramMap.subscribe(params => {
+      this.comments = [];
+      this.currPage = 1;
+      this.currentCommentPage = 1
+      this.isMoreComment = true;
+      this.isMore = false;
+      this.fetchDate(params.get('id'), params.get('categoryId'));
+    });
+    this.authService.getLoggedUser().subscribe((res) => {
+      if(res) {
+        this.user = res;
+      }
+    });
+  }
+
+  ngOnChanges(changes: SimpleChanges) {
+    if (changes['id'] || changes['categoryId']) {
+      this.fetchDate(changes['id'].currentValue, changes['categoryId'].currentValue);
+    }
+  }
+
+  fetchDate (id: string, categoryId: string) {
+      
     if(id && categoryId) {
       this.postService.getPostDetail(id).subscribe(res => {
         if(res.message === 'ok') {   
           let post = res.data;
           this.post = post;
-          
-          this.changed = id;
-          this.isChange = false;
+          this.liked = post.totalLiked;
+          this.commentService.getLengthComment(post._id).subscribe(res => {
+            this.commentLength = res.data
+          })
           this.getComment();
         }
       });
-      this.fetchData(categoryId, id);
-      this.authService.getLoggedUser().subscribe((res) => {
-        if(res) {
-          this.user = res;
-        }
-      });
+      this.fetchDataCategory(categoryId, id);
     }
-    
   }
 
-  // ngDoCheck(): void {    
-    
-  //   const data = history.state.data;
-  //   // if(this.changed.toString() !== data._id.toString()) {
-  //   //   this.isChange = true;
-  //   // }
-  //   // if(this.isChange) {
-  //   //   console.log('post');
-      
-  //   // }
-  //   const id = this.route.snapshot.paramMap.get('id');    
-  //   const categoryId = this.route.snapshot.paramMap.get('categoryId');  
-  //   if(this.changed.toString() !== id.toString())  this.isChange = true;
-  //   if(this.isChange) {  
-  //     this.fetchData(id, categoryId)
-  //     this.isChange = false;
-  //   }
-  // }
-
-  fetchData(categoryId: string, id:string) {
+  fetchDataCategory(categoryId: string, id:string) {
     
     this.postService.getPostsCategory(1, 4, categoryId).subscribe(res => {
       if(res.message === 'ok') {
@@ -118,6 +119,7 @@ export class PostDetailComponent implements OnInit {
   onDetail(id:string, category:string) {
     this.router.navigate(['/blog-detail', id, category]);
     window.scrollTo(0,0);
+    this.blogDetailSubject.next({ id, category });
   }
 
   getComment() {    
@@ -202,5 +204,11 @@ export class PostDetailComponent implements OnInit {
   onShowMoreComment() {    
     ++this.currentCommentPage;
     this.getComment();
+  }
+
+  onLiked(blogId: string) {
+    this.likedService.liked(blogId).subscribe(res => {
+      this.liked = res.data;
+    })
   }
 }

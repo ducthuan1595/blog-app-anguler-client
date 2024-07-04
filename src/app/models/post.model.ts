@@ -19,7 +19,7 @@ export interface ResponsePostType {
     _id: string;
   };
   createdAt: Date;
-  comments?: CommentType[];
+  comments?: number;
   totalLiked?: number;
 }
 
@@ -32,6 +32,11 @@ export interface ResponsePostPageType {
     totalPosts: number;
     currPage: number;
   }
+}
+
+export interface ResponseFavoritePostPageType {
+  value: ResponsePostType[];
+  score: number;
 }
 
 export interface RequestPostType {

@@ -6,14 +6,14 @@ export interface UserType {
     roleId: PermissionType;
 }
 
-export interface TokenType {
-    access_token: string;
-    refresh_token: string;
-}
-
 export interface PermissionType {
     user: boolean;
     admin: boolean;
     guest: boolean;
     moderator: boolean
+}
+
+export interface TokensType {
+    access_token: string;
+    refresh_token: string;
 }

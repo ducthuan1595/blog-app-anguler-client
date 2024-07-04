@@ -42,5 +42,9 @@ export class CommentService {
   
     return this.http.get<{ message: string; data: CommentType[]; code: number }>(`${this.URL}/v1/api/comment`, { params });
   }
+
+  getLengthComment(blogId: string) {
+    return this.http.get<{message: string, data: number}>(`${this.URL}/v1/api/comment/${blogId}?blogId=${blogId}`)
+  }
   
 }

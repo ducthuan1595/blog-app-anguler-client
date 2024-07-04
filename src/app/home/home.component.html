@@ -42,30 +42,30 @@
               <span>{{ formatDate(post.createdAt) }}</span>
             </div>
           </div>
-          <h3 class="title-post my-4" (click)="onDetail(post._id, post.categoryId._id)">{{ post.title }}</h3>
+          <h3 class="title-post my-4" (click)="onDetail(post._id, post.categoryId)">{{ post.title }}</h3>
           <div class="description">{{ post.desc }}</div>
         </div>
         <div class="inline"></div>
         <div class="footer-post">
           <div class="footer-post__first">
-            <div class="blog-review">
+            <div class="">
               <i class="fa-regular fa-eye"></i>
               <span>2</span>
             </div>
-            <div class="blog-review">
+            <div class="">
               <i class="fa-regular fa-message"></i>
-              <span>{{post.comments?.length}}</span>
+              <span>{{post.comments}}</span>
             </div>
           </div>
           <div class="footer-post__last">
-            <div class="blog-review">
+            <div class="">
               <i class="fa-regular fa-heart"></i>
               <span>{{post.totalLiked}}</span>
             </div>
           </div>
         </div>
       </li>
-      <nav aria-label="Page navigation">
+      <!-- <nav aria-label="Page navigation">
         <ul class="pagination navigation-post">
           <li class="page-item">
             <button
@@ -89,7 +89,7 @@
             </button>
           </li>
         </ul>
-      </nav>
+      </nav> -->
     </ul>
     <div class="information">
       <h2>Never Miss a New Post.</h2>
