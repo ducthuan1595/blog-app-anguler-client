@@ -41,16 +41,25 @@ export class AuthComponent {
           localStorage.setItem('account_blog', JSON.stringify(res.data));
           this.authService.loggedUser.next(res.data);
           this.authService.loggedTokens.next(res.tokens);
+          this.errorMessage = '';
           this.router.navigate(['']);
+        }else {
+          this.errorMessage = res.message;
         }
+      },(error) => {
+        console.error(error);
+        this.errorMessage = 'Incorrect, please try!';
       });;
     } else {
       this.authService.signup(email, password, username).pipe(
         finalize(() => this.isLoading = false)
       ).subscribe(
         (res) => {
-          console.log(res);
-          this.isLogin = true;
+          if(res.message === 'ok') {
+            console.log('logut///////', email, username);
+            this.errorMessage = '';
+            this.router.navigate(['/verify-otp', email, username]);
+          }
         },
         (error) => {
           console.error(error);

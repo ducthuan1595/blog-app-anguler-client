@@ -11,6 +11,7 @@ import { ManageBlogComponent } from './manage-blog/manage-blog.component';
 import { PostDetailComponent } from './post-detail/post-detail.component';
 import { AccountComponent } from './account/account.component';
 import { ViewComponent } from './system/view/view.component';
+import { VefiryOtpComponent } from './vefiry-otp/vefiry-otp.component';
 
 const appRoutes: Routes = [
   {
@@ -34,6 +35,12 @@ const appRoutes: Routes = [
   {
     path: 'auth',
     component: AuthComponent,
+  },
+  {
+
+      path: 'verify-otp/:email/:username',
+      component: VefiryOtpComponent
+
   },
   {
     path: 'manage-blog',

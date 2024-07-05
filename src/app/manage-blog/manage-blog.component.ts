@@ -1,4 +1,5 @@
 import { Component, OnInit } from '@angular/core';
+import { finalize } from 'rxjs';
 import {
   ManageService,
   ResCategoryType,
@@ -18,7 +19,7 @@ import { UserType } from '../models/user.model';
 })
 export class ManageBlogComponent implements OnInit {
   isEdit = false;
-  isLoading = true;
+  isLoading = false;
   postId = null;
   errMessage = '';
   title = '';
@@ -83,10 +84,10 @@ export class ManageBlogComponent implements OnInit {
   }
 
   onSubmit(form: NgForm) {
-    
     if (!form.valid || !this.userClient) {
       return this.errMessage = 'The fields are not empty!'
     }
+    this.isLoading = true;
     const data: RequestPostType = {
       title: form.value.title,
       image: {
@@ -99,7 +100,9 @@ export class ManageBlogComponent implements OnInit {
 
     if (this.isEdit && this.postId) {
       this.postService
-        .editPost({ ...data, postId: this.postId }).subscribe(res => {
+        .editPost({ ...data, postId: this.postId }).pipe(
+          finalize(() => this.isLoading = false)
+        ).subscribe(res => {
           if(res.message === 'ok') {
             this.postService.getPosts(1, 4);
             this.router.navigate(['blog'])

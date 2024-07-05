@@ -31,30 +31,12 @@ export class AuthInterceptor implements HttpInterceptor {
       }
     });
 
-    if(this.tokens && req.url.includes('/v1/api/auth/logout') && req.method === 'DELETE') {
-      console.log(this.tokens);
-      
+    if(this.tokens && req.url.includes('/v1/api/auth/logout') && req.method === 'DELETE') {      
       const authRequest = req.clone({
         headers: req.headers.set('Authorization', `Bearer ${this.tokens.access_token} ${this.tokens.refresh_token}`),
       });
       return next.handle(authRequest);
     }
-    // if (this.userRole?.admin || this.userRole?.moderator) {
-    //   if (
-    //     req.url.includes('/v1/api/category') ||
-    //     req.url.includes('/v1/api/-category') ||
-    //     req.url.includes('/v1/api/category') ||
-    //     req.url.includes('/v1/api/blog') ||
-    //     req.url.includes('/v1/api/user/blog') ||
-    //     req.url.includes('/v1/api/delete-post')
-    //   ) {
-        
-    //     const authRequest = req.clone({
-    //       headers: req.headers.set('Authorization', `Bearer ${this.token}`),
-    //     });
-    //     return next.handle(authRequest);
-    //   }
-    // }
 
     if (
       this.user && this.user.roleId.user && this.tokens &&
@@ -64,7 +46,8 @@ export class AuthInterceptor implements HttpInterceptor {
       (req.url.includes('/v1/api/blog') && req.method === 'PUT') ||
       (req.url.includes('/v1/api/blog') && req.method === 'DELETE') ||
       (req.url.includes('/v1/api/like') && req.method === 'GET') ||
-      (req.url.includes('/v1/api/like') && req.method === 'POST') 
+      (req.url.includes('/v1/api/like') && req.method === 'POST') ||
+      (req.url.includes('/v1/api/category') && req.method === 'POST') 
       // req.url.includes('/v1/api/update-post') ||
       // req.url.includes('/v1/api/delete-post') ||
       // req.url.includes('/v1/api/posts-user') ||

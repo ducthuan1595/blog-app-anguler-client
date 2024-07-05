@@ -1,0 +1,18 @@
+<div class="otp-container">
+  <div class="otp-header">
+    <h2 class="otp-title">Enter Your OTP</h2>
+    <p class="otp-slogan">We've sent a one-time code to your email address <span class="fw-bold">{{email}}</span></p>
+    <p class="otp-slogan">OTP code will expire after 1 minute</p>
+    <a class="text-primary" (click)="sendAgain()" style="cursor: pointer;">Send again!</a>
+  </div>
+  <input type="text" [(ngModel)]="valueInput" maxlength="6" class="otp-input" />
+
+  <div class="text-center">
+    <div class="text-danger text-center fs-6 fst-italic">{{errorMessage}}</div>
+    <button (click)="onSubmit()" class="btn btn-primary mt-4">Send</button>
+  </div>
+  <app-loading-spinner *ngIf="isLoading"></app-loading-spinner>
+</div>
+
+
+

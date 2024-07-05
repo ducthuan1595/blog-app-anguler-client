@@ -62,7 +62,7 @@
               class="form-control message-content"
               id="message-text"
               name="desc"
-              minlength="10"
+              minlength="4"
               rows="10"
               [(ngModel)]="desc"
               required
@@ -82,3 +82,4 @@
   </div>
 </div>
 <app-footer></app-footer>
+<app-loading-spinner *ngIf="isLoading"></app-loading-spinner>

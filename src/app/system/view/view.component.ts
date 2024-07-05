@@ -1,6 +1,8 @@
 import { Component, OnInit } from '@angular/core';
-import { ResponsePostType } from '../../models/post.model';
 import { Router } from '@angular/router';
+import { finalize } from 'rxjs';
+
+import { ResponsePostType } from '../../models/post.model';
 import { PostService } from '../../services/post.service';
 import { CommentService } from '../../services/comment.service';
 import { CommentType } from '../../models/comment.model';
@@ -18,6 +20,7 @@ export class ViewComponent implements OnInit {
   comments: CommentType[];
   commentLength = 0;
   likers: UserType[];
+  isLoading = false;
 
   constructor(private router: Router, private postService: PostService, private commentService: CommentService, private likedService: LikeService) {}
 
@@ -44,7 +47,10 @@ export class ViewComponent implements OnInit {
   onDelete() {
     const confirm = window.confirm('Are you sure?');
     if(confirm) {
-      this.postService.deletePost(this.post._id).subscribe(res => {
+      this.isLoading = true;
+      this.postService.deletePost(this.post._id).pipe(
+        finalize(() => this.isLoading = false)
+      ).subscribe(res => {
         if(res.message === 'ok') {
           this.router.navigate(['/system']);   
         }

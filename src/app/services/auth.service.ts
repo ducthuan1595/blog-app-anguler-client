@@ -82,4 +82,18 @@ export class AuthService {
   getLoggedToken(): Observable<TokensType> {
     return this.loggedTokens.asObservable();
   }
+
+  verifyOtp(otp: string, email: string) {
+    return this.http.post<{ message: string; data: {user: UserType; tokens: TokensType} }>(`${this.URL}/v1/api/otp/verify`, {
+      otp,
+      email
+    });
+  }
+
+  sendAgainOtp(email: string, username: string) {
+    return this.http.post<{ message: string }>(`${this.URL}/v1/api/otp/sent-otp`, {
+      email,
+      username
+    });
+  }
 }

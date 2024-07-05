@@ -1,8 +1,10 @@
 import { Component, OnInit } from '@angular/core';
+import { finalize } from 'rxjs';
+import { NgForm } from '@angular/forms';
+
 import { UploadCloudinary } from '../../services/uploadFile.service';
 import { ManageService, ResCategoryType } from '../../services/manage.service';
 import { AuthService } from '../../services/auth.service';
-import { NgForm } from '@angular/forms';
 import { covertDateToDMY } from '../../util/formatDate';
 
 @Component({
@@ -17,8 +19,10 @@ export class ManageComponent implements OnInit {
   };
   previewImageUrl = '';
   name = '';
+  slogan = '';
 
-  isLoading = true;
+  isLoading = false;
+  isUpdateLoad = false;
   isEdit = false;
   categoryId = '';
   errMessage = '';
@@ -43,13 +47,14 @@ export class ManageComponent implements OnInit {
   }
 
   onChange(event: any) {
+    this.isUpdateLoad = true;
     this.cloundinary.upload(event.target.files[0]).subscribe(
       (res) => {
         this.previewImageUrl = URL.createObjectURL(event.target.files[0]);
 
         this.image.public_id = res.public_id;
         this.image.url = res.url;
-        this.isLoading = false;
+        this.isUpdateLoad = false;
       },
       (err) => {
         console.log(err);
@@ -58,14 +63,22 @@ export class ManageComponent implements OnInit {
   }
 
   onSubmit(form: NgForm) {
-    if (!form.valid || !this.user)
+    if (!form.valid || !this.user) {
       return (this.errMessage = 'Value input valid! Please try again.');
+    }
+    if(!this.image) {
+      return this.errMessage = 'Not found image!'
+    }
+    this.isLoading = true;
     const data = {
       name: form.value.name,
+      slogan: form.value.slogan,
       image: this.image,
     };
     if (this.isEdit) {
-      this.manageService.editCategory(data, this.categoryId).subscribe(
+      this.manageService.editCategory(data, this.categoryId).pipe(
+        finalize(() => this.isLoading = false)
+      ).subscribe(
         (res) => {
           if (res.message === 'ok') {
             const index = this.categories.findIndex(
@@ -84,7 +97,9 @@ export class ManageComponent implements OnInit {
         }
       );
     } else {
-      this.manageService.createCategory(data).subscribe((res) => {
+      this.manageService.createCategory(data).pipe(
+        finalize(() => this.isLoading = false)
+      ).subscribe((res) => {
         this.categories.unshift(res.data);
       });
     }
@@ -107,7 +122,9 @@ export class ManageComponent implements OnInit {
   onDelete(id: string) {
     const confirm = window.confirm('Are you sure?');
     if (confirm) {
-      this.manageService.removeCategory(id).subscribe((res) => {
+      this.manageService.removeCategory(id).pipe(
+        finalize(() => this.isLoading = false)
+      ).subscribe((res) => {
         const updateCategory = this.categories.filter(
           (item) => item._id !== id
         );
