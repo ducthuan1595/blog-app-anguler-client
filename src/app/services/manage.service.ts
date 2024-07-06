@@ -5,6 +5,7 @@ import { URL_SERVER } from '../util/contant';
 
 interface CategoryType {
   name: string;
+  slogan: string;
   image: {
     public_id: string;
     url: string;

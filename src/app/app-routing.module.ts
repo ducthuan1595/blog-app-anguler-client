@@ -51,7 +51,11 @@ const appRoutes: Routes = [
     component: ManageBlogComponent,
   },
   {
-    path: "account/:slug",
+    path: "account",
+    component: AccountComponent,
+  },
+  {
+    path: "notification",
     component: AccountComponent,
   },
   {

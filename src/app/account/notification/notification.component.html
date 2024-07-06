@@ -1,0 +1,19 @@
+<div class="list-group">
+  <a href="#" class="list-group-item list-group-item-action d-flex justify-content-between" aria-current="true" *ngFor="let notify of unNotifications">
+    <div>
+      {{notify.sender[0].username}} {{notify.notify_content}} {{notify.notify_option.blogTitle}}
+    </div>
+    <span class="" style="font-size: 12px; font-weight: 500;"><i class="fa-solid fa-clock"></i> {{formatDate(notify?.createdAt).time}} / {{formatDate(notify?.createdAt).date}}</span>
+  </a>
+</div>
+
+<div class="list-group">
+  <a href="#" class="list-group-item list-group-item-action d-flex justify-content-between" aria-current="true" *ngFor="let notify of readNotifications">
+    <div>
+      {{notify.sender[0].username}} {{notify.notify_content}} {{notify.notify_option.blogTitle}}
+    </div>
+    <span class="" style="font-size: 12px; font-weight: 500;"><i class="fa-solid fa-clock"></i> {{formatDate(notify?.createdAt).time}} / {{formatDate(notify?.createdAt).date}}</span>
+  </a>
+</div>
+
+  

@@ -1,4 +1,5 @@
 import { Component, OnInit } from '@angular/core';
+import { finalize } from 'rxjs';
 import { PostService } from '../../services/post.service';
 import { ResponsePostType } from '../../models/post.model';
 import { NavigationExtras, Router } from '@angular/router';
@@ -15,11 +16,15 @@ export class DashboardComponent implements OnInit {
   nextPage: boolean;
   prevPage: boolean;
   isForm = true;
+  isLoading = false;
 
   constructor(private postService: PostService, private router: Router) {}
 
   ngOnInit(): void {
-    this.postService.getPosts(1, 10).subscribe(res => {
+    this.isLoading = true;
+    this.postService.getPosts(1, 10).pipe(
+      finalize(() => this.isLoading = false)
+    ).subscribe(res => {
       if(res.message === 'ok') {
         this.prevPage = res.data.meta.prevPage;
         this.nextPage = res.data.meta.nextPage;

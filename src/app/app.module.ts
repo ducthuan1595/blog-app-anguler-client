@@ -25,6 +25,7 @@ import { ViewComponent } from './system/view/view.component';
 import { PendingInterceptor } from './pedding.interceptor.spec';
 import { LoadingSpinnerComponent } from './shares/loadingSpinner.component';
 import { VefiryOtpComponent } from './vefiry-otp/vefiry-otp.component';
+import { NotificationComponent } from './account/notification/notification.component';
 
 
 @NgModule({
@@ -46,6 +47,7 @@ import { VefiryOtpComponent } from './vefiry-otp/vefiry-otp.component';
     ViewComponent,
     LoadingSpinnerComponent,
     VefiryOtpComponent,
+    NotificationComponent,
   ],
   imports: [BrowserModule, FormsModule, HttpClientModule, AppRoutingModule],
   providers: [

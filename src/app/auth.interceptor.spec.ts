@@ -11,8 +11,8 @@ import { TokensType, UserType } from './models/user.model';
 
 @Injectable({ providedIn: 'root' })
 export class AuthInterceptor implements HttpInterceptor {
-  private user: UserType;
-  private tokens: TokensType
+  private user: UserType = null;
+  private tokens: TokensType = null;
   constructor(private authService: AuthService) {}
 
   intercept(req: HttpRequest<any>, next: HttpHandler): any {
@@ -39,20 +39,19 @@ export class AuthInterceptor implements HttpInterceptor {
     }
 
     if (
-      this.user && this.user.roleId.user && this.tokens &&
-      (req.url.includes('/v1/api/comment') && req.method === 'POST') ||
-      (req.url.includes('/v1/api/blog') && req.method === 'POST') ||
-      (req.url.includes('/v1/api/blog/user') && req.method === 'GET') ||
-      (req.url.includes('/v1/api/blog') && req.method === 'PUT') ||
-      (req.url.includes('/v1/api/blog') && req.method === 'DELETE') ||
-      (req.url.includes('/v1/api/like') && req.method === 'GET') ||
-      (req.url.includes('/v1/api/like') && req.method === 'POST') ||
-      (req.url.includes('/v1/api/category') && req.method === 'POST') 
-      // req.url.includes('/v1/api/update-post') ||
-      // req.url.includes('/v1/api/delete-post') ||
-      // req.url.includes('/v1/api/posts-user') ||
-      // req.url.includes('/v1/api/delete-post')
-      
+      this.user && this.user.roleId.user && this.tokens && (
+        (req.url.includes('/v1/api/comment') && req.method === 'POST') ||
+        (req.url.includes('/v1/api/blog') && req.method === 'POST') ||
+        (req.url.includes('/v1/api/blog/user') && req.method === 'GET') ||
+        (req.url.includes('/v1/api/blog') && req.method === 'PUT') ||
+        (req.url.includes('/v1/api/blog') && req.method === 'DELETE') ||
+        (req.url.includes('/v1/api/like') && req.method === 'GET') ||
+        (req.url.includes('/v1/api/like') && req.method === 'POST') ||
+        (req.url.includes('/v1/api/category') && req.method === 'PUT') ||
+        (req.url.includes('/v1/api/category') && req.method === 'POST') ||
+        (req.url.includes('/v1/api/notify/unread') && req.method === 'GET') ||
+        (req.url.includes('/v1/api/notify/read') && req.method === 'GET')
+      )
     ) {      
       const authRequest = req.clone({
         headers: req.headers.set('Authorization', `Bearer ${this.tokens.access_token}`),

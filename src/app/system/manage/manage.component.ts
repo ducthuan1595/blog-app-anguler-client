@@ -37,11 +37,14 @@ export class ManageComponent implements OnInit {
   ) {}
 
   ngOnInit() {
+    this.isLoading = true;
     this.authService.getLoggedUser().subscribe((user) => {
       console.log({ user });
       this.user = user;
     });
-    this.manageService.getCategories().subscribe((res) => {
+    this.manageService.getCategories().pipe(
+      finalize(() => this.isLoading = false)
+    ).subscribe((res) => {
       this.categories = res.data;
     });
   }
@@ -87,6 +90,7 @@ export class ManageComponent implements OnInit {
             if (index !== -1) {
               const updateCategory = this.categories[index];
               updateCategory.name = res.data.name;
+              updateCategory.slogan = res.data.slogan;
               updateCategory.image = res.data.image;
               this.categories[index] = updateCategory;
             }
@@ -113,6 +117,7 @@ export class ManageComponent implements OnInit {
     this.categories.filter((item) => {
       if (item._id === id) {
         this.name = item.name;
+        this.slogan = item.slogan;
         this.previewImageUrl = item.image.url;
       }
     });

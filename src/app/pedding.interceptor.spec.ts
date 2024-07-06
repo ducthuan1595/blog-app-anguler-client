@@ -9,7 +9,6 @@ export class PendingInterceptor implements HttpInterceptor {
 
   intercept(request: HttpRequest<any>, next: HttpHandler): Observable<HttpEvent<any>> {
     this.pendingRequests++;
-    console.log('request//////////////////', this.pendingRequests);
     
     return next.handle(request).pipe(
       finalize(() => {
@@ -20,7 +19,6 @@ export class PendingInterceptor implements HttpInterceptor {
   }
   
   get isPending(): boolean {    
-    console.log('descrease//////////////////', this.pendingRequests);
     return this.pendingRequests > 0;
   }
 }

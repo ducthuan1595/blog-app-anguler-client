@@ -4,6 +4,7 @@ export interface UserType {
     username: string;
     _id: string;
     roleId: PermissionType;
+    avatar: any;
 }
 
 export interface PermissionType {

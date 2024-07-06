@@ -47,8 +47,7 @@ export class AuthComponent {
           this.errorMessage = res.message;
         }
       },(error) => {
-        console.error(error);
-        this.errorMessage = 'Incorrect, please try!';
+        this.errorMessage = error.error.message;
       });;
     } else {
       this.authService.signup(email, password, username).pipe(
