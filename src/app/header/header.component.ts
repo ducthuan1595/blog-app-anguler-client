@@ -1,11 +1,10 @@
 import { Component, DoCheck, OnChanges, OnInit, Output, SimpleChanges } from '@angular/core';
 import { Location } from '@angular/common';
 import { NavigationExtras, Router } from '@angular/router';
-import { Buffer } from 'buffer'
 
 import {  AuthService } from '../services/auth.service';
 import { PostService } from '../services/post.service';
-import { ResponsePostType } from '../models/post.model';
+import { PostSearchType, ResponsePostType } from '../models/post.model';
 import { UserType } from '../models/user.model';
 import { NotifyService } from '../services/notify.service';
 import { NotifyType } from '../models/notify.model';
@@ -18,10 +17,9 @@ import { NotifyType } from '../models/notify.model';
 export class HeaderComponent implements OnInit {
   isUser = false;
   searchResult = '';
-  posts: ResponsePostType[];
+  posts: PostSearchType[];
   isPopup = false;
   currURL = '';
-  post: ResponsePostType;
 
   userClient: UserType;
   url_img = '';
@@ -34,8 +32,7 @@ export class HeaderComponent implements OnInit {
     this.currURL = currentURL;    
     this.authService.getLoggedUser().subscribe((res) => {
       if(res) {        
-        const base64 = Buffer.from(res.avatar.default).toString('base64');
-        this.url_img = 'data:image/jpeg;base64' + base64;
+  
         this.userClient = res;
         this.isUser = !!res;
 
@@ -58,7 +55,11 @@ export class HeaderComponent implements OnInit {
     if(this.searchResult) {
       this.postService.searchPost(this.searchResult).subscribe(res => {
         if(res.message === 'ok') {
-          this.posts = res.data;
+          const data = res.data.map(post => {
+            return JSON.parse(post.value.data)
+          })
+          
+          this.posts = data;
           this.isPopup = !this.isPopup;
         }
       })
@@ -71,7 +72,7 @@ export class HeaderComponent implements OnInit {
           data: post,
         }
       }
-      this.router.navigate(['/blog-detail', post._id, post.categoryId._id], navigationExtras);
+      this.router.navigate(['/blog-detail', post._id, post.categoryId], navigationExtras);
       this.isPopup = false;
       this.searchResult = '';
   }

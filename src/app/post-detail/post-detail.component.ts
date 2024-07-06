@@ -1,14 +1,16 @@
 import { Component, DoCheck, Input, OnChanges, OnInit, SimpleChanges } from '@angular/core';
 import { finalize } from 'rxjs/operators';
-import { PostService } from '../services/post.service';
+import { DomSanitizer, SafeUrl } from '@angular/platform-browser';
+import { BehaviorSubject } from 'rxjs';
 import { ActivatedRoute, Router } from '@angular/router';
+
+import { PostService } from '../services/post.service';
 import { ResponsePostPageType, ResponsePostType } from '../models/post.model';
 import { CommentService } from '../services/comment.service';
 import { AuthService } from '../services/auth.service';
 import { UserType } from '../models/user.model';
 import { CommentType, CreateCommentType, GetCommentType, CommentAllType } from '../models/comment.model';
 import { covertDateToDMY } from '../util/formatDate';
-import { BehaviorSubject } from 'rxjs';
 import { LikeService } from '../services/like.service';
 
 @Component({
@@ -29,6 +31,7 @@ export class PostDetailComponent implements OnInit, OnChanges {
   commentLength = 0;
   liked = 0;
   isLoading = false;
+  avatar: SafeUrl;
 
   isMore = false;
   currentCommentPage = 1;
@@ -36,7 +39,7 @@ export class PostDetailComponent implements OnInit, OnChanges {
   private blogDetailSubject = new BehaviorSubject<any>(null);
   blogDetailObservable$ = this.blogDetailSubject.asObservable();
 
-  constructor(private postService: PostService, private router: Router, private route: ActivatedRoute, private commentService: CommentService, private authService: AuthService, private likedService: LikeService) {}
+  constructor(private postService: PostService, private router: Router, private route: ActivatedRoute, private commentService: CommentService, private authService: AuthService, private likedService: LikeService, private sanitizer: DomSanitizer) {}
 
   ngOnInit(): void {
     this.isLoading = true
@@ -65,7 +68,9 @@ export class PostDetailComponent implements OnInit, OnChanges {
       
     if(id && categoryId) {
       this.postService.getPostDetail(id).subscribe(res => {
-        if(res.message === 'ok') {   
+        if(res.message === 'ok') {
+          const base64 = this.sanitizer.bypassSecurityTrustUrl(`data:image/png;base64,${(res.data.userId.avatar.default).toString('base64')}`);
+          this.avatar = base64;  
           let post = res.data;
           this.post = post;
           this.liked = post.totalLiked;
@@ -157,13 +162,18 @@ export class PostDetailComponent implements OnInit, OnChanges {
 
     this.commentService.getComment(data).subscribe(res => {
       if(res.message === 'ok') {
-
+        const result = res.data.reverse();
+        for(let j of result) {
+          const base64 = this.sanitizer.bypassSecurityTrustUrl(`data:image/png;base64,${(j.userId.avatar.default).toString('base64')}`);
+          j.avatarSender = base64;
+        }
+        const base64 = this.sanitizer.bypassSecurityTrustUrl(`data:image/png;base64,${(comment.userId.avatar.default).toString('base64')}`);
         for(let i of this.comments) {
           if(i._id === comment._id) {
-            i.replies = res.data
+            i.replies = res.data,
+            i.avatarSender = base64
           }
-        }
-       
+        }        
       }
     }) 
   }
@@ -191,7 +201,7 @@ export class PostDetailComponent implements OnInit, OnChanges {
         if(!parentCommentId) {
           return this.comments.unshift(res.data);
         }
-        this.comments[index].replies.unshift(res.data);
+        this.comments[index].replies.push(res.data);
       }
     })
     this.commentValue = '';

@@ -17,4 +17,10 @@ export class NotifyService {
     getReadNotify () {
         return this.http.get<{message: string; data: NotifyType[] | []}>(`${URL_SERVER}/v1/api/notify/read`)
     }
+
+    changeReadNotify (notifyId: string) {
+        return this.http.put<{message: string; data: NotifyType[] | []}>(`${URL_SERVER}/v1/api/notify`, {
+            notifyId
+        })
+    }
 }

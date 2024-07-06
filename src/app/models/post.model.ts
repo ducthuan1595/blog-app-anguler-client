@@ -1,4 +1,5 @@
 import { CommentType } from "./comment.model";
+import { UserType } from "./user.model";
 export interface ResponsePostType {
   _id: string;
   title: string;
@@ -17,6 +18,7 @@ export interface ResponsePostType {
   userId: {
     username: string;
     _id: string;
+    avatar: any;
   };
   createdAt: Date;
   comments?: number;
@@ -47,5 +49,20 @@ export interface RequestPostType {
   };
   desc: string;
   categoryId: string;
+}
 
+export interface PostSearchType {
+  value: {
+    data: {
+      _id: string;
+      title: string;
+      image: {
+        public_id: string;
+        url: string;
+      };
+      desc: string;
+      categoryId: string;
+      userId: UserType;
+    }
+  }
 }

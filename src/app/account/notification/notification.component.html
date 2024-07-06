@@ -1,19 +1,35 @@
-<div class="list-group">
-  <a href="#" class="list-group-item list-group-item-action d-flex justify-content-between" aria-current="true" *ngFor="let notify of unNotifications">
-    <div>
-      {{notify.sender[0].username}} {{notify.notify_content}} {{notify.notify_option.blogTitle}}
-    </div>
-    <span class="" style="font-size: 12px; font-weight: 500;"><i class="fa-solid fa-clock"></i> {{formatDate(notify?.createdAt).time}} / {{formatDate(notify?.createdAt).date}}</span>
-  </a>
-</div>
+<h4 class="mb-5">Notifications</h4>
+<div *ngIf="readNotifications.length > 0 || unreadNotifications.length > 0; else elseBlock">
+  <div class="list-group" *ngIf="unreadNotifications.length > 0">
+    <h6 class="text-info">Unread Notifications</h6>
+    <a [routerLink]="['/blog-detail', notify.notify_option.blogId, notify.notify_option.categoryId]" class="list-group-item list-group-item-action d-flex justify-content-between" aria-current="true" *ngFor="let notify of unreadNotifications" (click)="onReadNotify(notify)">
+      <div>
+        <strong>{{notify.sender[0].username}}</strong> {{notify.notify_content}} - <strong>{{notify.notify_option.blogTitle}}</strong>
+      </div>
+      <span class="" style="font-size: 12px; font-weight: 500;">
+        <i class="fa-solid fa-clock"></i>
+        {{formatDate(notify?.createdAt).time}} / {{formatDate(notify?.createdAt).date}}
+      </span>
+    </a>  
+  </div>
 
-<div class="list-group">
-  <a href="#" class="list-group-item list-group-item-action d-flex justify-content-between" aria-current="true" *ngFor="let notify of readNotifications">
-    <div>
-      {{notify.sender[0].username}} {{notify.notify_content}} {{notify.notify_option.blogTitle}}
-    </div>
-    <span class="" style="font-size: 12px; font-weight: 500;"><i class="fa-solid fa-clock"></i> {{formatDate(notify?.createdAt).time}} / {{formatDate(notify?.createdAt).date}}</span>
-  </a>
+  <div class="list-group mt-5" *ngIf="readNotifications.length > 0">
+    <h6 class="text-warning">Read Notifications</h6>
+    <a [routerLink]="['/blog-detail', notify.notify_option.blogId, notify.notify_option.categoryId]" class="list-group-item list-group-item-action d-flex justify-content-between" aria-current="true" *ngFor="let notify of readNotifications">
+      <div>
+        <strong>{{notify.sender[0].username}}</strong> {{notify.notify_content}} - <strong>{{notify.notify_option.blogTitle}}</strong>
+      </div>
+      <span class="" style="font-size: 12px; font-weight: 500;">
+        <i class="fa-solid fa-clock"></i>
+        {{formatDate(notify?.createdAt).time}} / {{formatDate(notify?.createdAt).date}}
+      </span>
+    </a>  
+  </div>
 </div>
+<ng-template #elseBlock >
+  <div style="text-align: center; margin-top: 200px;">
+    You don't any notifications yet
+  </div>
+</ng-template>
 
   

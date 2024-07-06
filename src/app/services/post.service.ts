@@ -4,6 +4,7 @@ import {
   RequestPostType,
   ResponsePostPageType,
   ResponseFavoritePostPageType,
+  PostSearchType,
 } from '../models/post.model';
 import { HttpClient } from '@angular/common/http';
 import { Router } from '@angular/router';
@@ -20,7 +21,7 @@ export class PostService {
   constructor(private http: HttpClient, private router: Router) {}
 
   searchPost(key:string) {
-    return this.http.get<{message: string; data: ResponsePostType[]}>(`${this.URL}/v1/api/blog/search?keyword=${key}`);
+    return this.http.get<{message: string; data: any[]}>(`${this.URL}/v1/api/blog/search?keyword=${key}`);
   }
 
   getPosts(page: number, limit: number) {

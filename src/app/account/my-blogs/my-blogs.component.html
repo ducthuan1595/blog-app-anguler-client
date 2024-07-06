@@ -11,7 +11,7 @@
       <div class="col-6 info-post">
         <div class="row mb-2 relative">
           <div class="col-11">
-            <span>{{ formatDate(post.createdAt) }}</span>
+            <span>{{ formatDate(post.createdAt).time }} / {{ formatDate(post.createdAt).date }}</span>
           </div>
           <div class="col align-self-end cursor" (click)="openPopup(post._id)">
             <i class="fa-solid fa-ellipsis-vertical"></i>

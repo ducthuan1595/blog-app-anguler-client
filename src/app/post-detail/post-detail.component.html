@@ -12,12 +12,12 @@
     <div class="" *ngIf="post">
       <div class="author">
         <img
-          [src]="post.userId?.avatar ? post.userId.avatar : 'https://t4.ftcdn.net/jpg/05/49/98/39/360_F_549983970_bRCkYfk0P6PP5fKbMhZMIb07mCJ6esXL.jpg'"
+          [src]="avatar ? avatar : 'https://t4.ftcdn.net/jpg/05/49/98/39/360_F_549983970_bRCkYfk0P6PP5fKbMhZMIb07mCJ6esXL.jpg'"
           alt="avatar"
         />
         <div class="info">
           <h4>{{ post.userId.username }}</h4>
-          <span>{{ formatDate(post.createdAt) }}</span>
+          <span>{{ formatDate(post.createdAt).date }}</span>
         </div>
       </div>
       <h3 class="title-post my-4">{{ post.title }}</h3>
@@ -50,14 +50,14 @@
     <li class="comment-content" *ngFor="let comment of comments; let index = index">
       <div class="comment-content__main">
         <img
-          [src]="comment.userId?.avatar ? comment.userId.avatar : 'https://t4.ftcdn.net/jpg/05/49/98/39/360_F_549983970_bRCkYfk0P6PP5fKbMhZMIb07mCJ6esXL.jpg'"
+          [src]="comment.avatarSender ? comment.avatarSender : 'https://t4.ftcdn.net/jpg/05/49/98/39/360_F_549983970_bRCkYfk0P6PP5fKbMhZMIb07mCJ6esXL.jpg'"
           alt="avatar"
         />
 
         <div>{{comment.content}}</div>
       </div>
       <div class="comment-content__day fs-6">
-        <span><i class="far fa-calendar"></i> {{ formatDate(comment.createdAt) }}</span>
+        <span><i class="far fa-calendar"></i> {{ formatDate(comment.createdAt).date }}</span>
         <div>
           <p>
             <button (click)="onReply(comment._id)" class="btn fs-6" type="button" data-bs-toggle="collapse" [data-bs-target]="'#' + comment._id" aria-expanded="true" [aria-controls]="comment._id">
@@ -76,13 +76,13 @@
               <div class="comment-content__main">
                 <img
                   class="avatar-child"
-                  [src]="comment.userId?.avatar ? comment.userId.avatar : 'https://t4.ftcdn.net/jpg/05/49/98/39/360_F_549983970_bRCkYfk0P6PP5fKbMhZMIb07mCJ6esXL.jpg'"
+                  [src]="item.avatarSender ? item.avatarSender : 'https://t4.ftcdn.net/jpg/05/49/98/39/360_F_549983970_bRCkYfk0P6PP5fKbMhZMIb07mCJ6esXL.jpg'"
                   alt="avatar"
                 />
                 <div>{{item.content}}</div>
               </div>
               <div class="comment-content__day fs-6">
-                <span><i class="far fa-calendar"></i> {{ formatDate(item.createdAt) }}</span>
+                <span><i class="far fa-calendar"></i> {{ formatDate(item.createdAt).date }}</span>
                 <div>
                   <p>
                     <button (click)="onReply(item._id)" class="btn fs-6" type="button" data-bs-toggle="collapse" [data-bs-target]="'#' + comment._id" aria-expanded="true" [aria-controls]="comment._id">

@@ -21,9 +21,11 @@ export interface DeleteCommentType {
 
 export interface CommentAllType extends CommentType {
     replies?: CommentType[];
+    avatarSender?: any;
 }
 
 export interface CommentType {
+    userId: UserType;
     blogId: string;
     parentCommentId: string;
     left: number;
@@ -31,6 +33,6 @@ export interface CommentType {
     content: string;
     isDeleted: boolean;
     createdAt: Date;
-    userId: UserType;
     _id: string;
+    avatarSender?: any;
 }

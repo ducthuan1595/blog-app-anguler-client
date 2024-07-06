@@ -1,10 +1,12 @@
 import { Component, OnInit } from '@angular/core';
 import { Buffer } from 'buffer'
-import { ActivatedRoute } from '@angular/router';
+import { finalize } from 'rxjs';
+import { ActivatedRoute, Router } from '@angular/router';
 import { DomSanitizer, SafeUrl } from '@angular/platform-browser';
 
 import {  AuthService } from '../services/auth.service';
 import { UserType } from '../models/user.model';
+import { NotifyService } from '../services/notify.service';
 
 @Component({
   selector: 'app-account',
@@ -15,8 +17,9 @@ export class AccountComponent implements OnInit {
   user: UserType;
   url_img: SafeUrl;
   isNotify = false;
+  isLoading = false;
 
-  constructor(private authService: AuthService, private route: ActivatedRoute, private sanitizer: DomSanitizer) {};
+  constructor(private authService: AuthService, private route: ActivatedRoute, private sanitizer: DomSanitizer, private notifyService: NotifyService, private router: Router) {};
 
   ngOnInit(): void {
     this.authService.getLoggedUser().subscribe(res => {
@@ -25,18 +28,23 @@ export class AccountComponent implements OnInit {
       this.url_img = base64;    
     })
 
-    const currentUrl = this.route.snapshot.url.join('/');
-    console.log(currentUrl);
-    
+    const currentUrl = this.route.snapshot.url.join('/');    
     if(currentUrl == 'notification') {
-      this.isNotify = true
+      this.isLoading = true;
+      this.isNotify = true;
+      this.notifyService.getUnNotify().pipe(
+        finalize(() => this.isLoading = false)
+      ).subscribe(res => {
+        this.router.navigate(['/notification'], {queryParams: {data: JSON.stringify(res.data)}});
+      })
+    }else {
+      this.isNotify = false;
     }
     // this.route.paramMap.subscribe((params) => {
 
     // })
     
   }
-
 
   onLogout() {   
     this.authService.logout();

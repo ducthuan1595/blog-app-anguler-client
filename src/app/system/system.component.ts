@@ -44,7 +44,11 @@ export class SystemComponent implements OnInit {
     if(this.searchValue) {
       this.postService.searchPost(this.searchValue).subscribe(res => {
         if(res.message === 'ok') {
-          this.posts = res.data;
+          const data = res.data.map(post => {
+            return JSON.parse(post.value.data)
+          })
+          
+          this.posts = data;
           this.isPopup = !this.isPopup;
         }
       })

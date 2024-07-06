@@ -30,7 +30,7 @@
           />
         </div>
         <div class="col-6 info-post">
-          <span>{{ formatDate(post.createdAt) }}</span>
+          <span>{{ formatDate(post.createdAt).time }} / {{ formatDate(post.createdAt).date }}</span>
           <h3 class="title-post" (click)="onDetail(post._id, post.categoryId._id)">{{ post.title }}</h3>
           <div class="description">{{ post.desc }}</div>
         </div>

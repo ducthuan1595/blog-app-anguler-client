@@ -8,4 +8,5 @@ export interface NotifyType {
     createdAt: Date;
     notify_option: object;
     sender: UserType,
+    _id: string;
 }

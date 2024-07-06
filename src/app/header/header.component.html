@@ -29,7 +29,7 @@
           <a class="nav-link" routerLinkActive="active" routerLink="/account">{{userClient.username}}</a>
         </li>
         <li class="nav-item ms-4" *ngIf="isUser">
-          <a class="nav-link" (click)="openNotify()"><i class="fa-solid fa-bell"></i><span class="text-danger fs-6" *ngIf="notifies.length > 0">{{notifies.length}}</span></a>
+          <a class="nav-link" (click)="openNotify()"><i class="fa-solid fa-bell"></i><span class="text-light" style="padding: 3px 6px; background: #dc3545;border-radius: 50%; font-size: 10px;" *ngIf="notifies.length > 0">{{notifies.length}}</span></a>
         </li>
         
         <li class="nav-item" *ngIf="!isUser">

@@ -50,7 +50,8 @@ export class AuthInterceptor implements HttpInterceptor {
         (req.url.includes('/v1/api/category') && req.method === 'PUT') ||
         (req.url.includes('/v1/api/category') && req.method === 'POST') ||
         (req.url.includes('/v1/api/notify/unread') && req.method === 'GET') ||
-        (req.url.includes('/v1/api/notify/read') && req.method === 'GET')
+        (req.url.includes('/v1/api/notify/read') && req.method === 'GET') ||
+        (req.url.includes('/v1/api/notify') && req.method === 'PUT')
       )
     ) {      
       const authRequest = req.clone({
