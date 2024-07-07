@@ -34,7 +34,7 @@
           <img class="image" [src]="post.image[0].url" [alt]="post.title" />
           <div class="author">
             <img
-              src="https://t4.ftcdn.net/jpg/05/49/98/39/360_F_549983970_bRCkYfk0P6PP5fKbMhZMIb07mCJ6esXL.jpg"
+              [src]="post.avatarSender ? post.avatarSender : 'https://t4.ftcdn.net/jpg/05/49/98/39/360_F_549983970_bRCkYfk0P6PP5fKbMhZMIb07mCJ6esXL.jpg'"
               alt="avatar"
             />
             <div class="info">
@@ -50,7 +50,7 @@
           <div class="footer-post__first">
             <div class="">
               <i class="fa-regular fa-eye"></i>
-              <span>2</span>
+              <span>{{post.views}}</span>
             </div>
             <div class="">
               <i class="fa-regular fa-message"></i>

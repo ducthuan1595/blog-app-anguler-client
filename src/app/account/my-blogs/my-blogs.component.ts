@@ -20,6 +20,7 @@ export class MyBlogsComponent implements OnInit {
   currPage = 1;
   prevPage: boolean;
   nextPage: boolean;
+  limitPage = 4;
   isPopup = '';
   isOpen = false;
   isLoading = false;
@@ -68,7 +69,7 @@ export class MyBlogsComponent implements OnInit {
   onPrevPage() {
     if (!this.prevPage) return;
     this.isLoading = true;
-    this.postService.getPosts(this.currPage - 1, 4).pipe(
+    this.postService.getPosts(this.currPage - 1, this.limitPage).pipe(
       finalize(() => this.isLoading = false)
     ).subscribe((res) => {
       if (res.message === 'ok') {
@@ -83,7 +84,7 @@ export class MyBlogsComponent implements OnInit {
   onNextPage() {
     if (!this.nextPage) return;
     this.isLoading = true;
-    this.postService.getPosts(this.currPage + 1, 4).pipe(
+    this.postService.getPosts(this.currPage + 1, this.limitPage).pipe(
       finalize(() => this.isLoading = false)
     ).subscribe((res) => {
       if (res.message === 'ok') {
@@ -100,7 +101,7 @@ export class MyBlogsComponent implements OnInit {
 
   fetPosts() {
     this.isLoading = true;
-    this.postService.getPostUser(1, 4).pipe(
+    this.postService.getPostUser(1, this.limitPage).pipe(
       finalize(() => this.isLoading = false)
     ).subscribe(res => {      
       if(res.message === 'ok') {

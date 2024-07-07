@@ -13,7 +13,10 @@
       <strong>Total Comments:</strong> {{commentLength}}
     </div>
     <div class="col-12">
-      <strong>Public Date:</strong> {{formatDate(post.createdAt)}}
+      <strong>Total Views:</strong> {{views}}
+    </div>
+    <div class="col-12">
+      <strong>Public Date:</strong> {{formatDate(post.createdAt).time}} / {{formatDate(post.createdAt).date}}
     </div>
     <div class="col-12">
       <img [src]="post.image[0].url" [alt]="post.title">

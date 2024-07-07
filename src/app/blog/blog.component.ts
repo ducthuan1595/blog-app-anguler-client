@@ -23,6 +23,7 @@ export class BlogComponent implements OnInit {
   currPage: number = 1;
   nextPage: boolean;
   prevPage: boolean;
+  limitPage = 4;
   navLink = 'all';
   isLoading = false;
 
@@ -49,13 +50,17 @@ export class BlogComponent implements OnInit {
   
     const currentRouteUrl = this.router.url.split('/')[2];
     
-    if(currentRouteUrl) {
-        this.postService.getPostsCategory(1, 4, currentRouteUrl).pipe(
+    if(currentRouteUrl && currentRouteUrl !== 'all') {
+        this.postService.getPostsCategory(1, this.limitPage, currentRouteUrl).pipe(
           finalize(() => this.isLoading = false)
         ).subscribe(res => {
           if(res.message === 'ok') {      
             this.navLink = currentRouteUrl;
             this.posts = res.data.posts;
+            const convert = res.data.meta;
+            this.currPage = +convert.currPage;
+            this.nextPage =  convert.nextPage;
+            this.prevPage = convert.prevPage;
           }
         })
       
@@ -85,7 +90,7 @@ export class BlogComponent implements OnInit {
       this.navLink = id;
     } else {
       this.isLoading = true;
-      this.postService.getPostsCategory(1, 4, id).pipe(
+      this.postService.getPostsCategory(1, this.limitPage, id).pipe(
         finalize(() => this.isLoading = false)
       ).subscribe((res) => {
         if (res.message === 'ok') {
@@ -110,45 +115,74 @@ export class BlogComponent implements OnInit {
   onPrevPage() {
     if (!this.prevPage) return;
     this.isLoading = true;
-    this.postService.getPosts(this.currPage - 1, 4).pipe(
-      finalize(() => this.isLoading = false)
-    ).subscribe((res) => {
-      if (res.message === 'ok') {
-        const convert = res.data.meta;
-        this.posts = res.data.posts;
-        this.currPage = +convert.currPage;
-        this.nextPage = convert.nextPage;
-        this.prevPage = convert.prevPage;
-      }
-    });
+    if(this.navLink === 'all') {
+      this.postService.getPosts(this.currPage - 1, this.limitPage).pipe(
+        finalize(() => this.isLoading = false)
+      ).subscribe((res) => {
+        if (res.message === 'ok') {
+          const convert = res.data.meta;
+          this.posts = res.data.posts;
+          this.currPage = +convert.currPage;
+          this.nextPage = convert.nextPage;
+          this.prevPage = convert.prevPage;
+        }
+      });
+    }else {      
+      this.postService.getPostsCategory(this.currPage - 1, this.limitPage, this.navLink).pipe(
+        finalize(() => this.isLoading = false)
+      ).subscribe((res) => {
+        if (res.message === 'ok') {
+          const convert = res.data.meta;
+          this.posts = res.data.posts;
+          this.currPage = +convert.currPage;
+          this.nextPage = convert.nextPage;
+          this.prevPage = convert.prevPage;
+        }
+      });
+    }
     window.scrollTo(0,100);
   }
   onNextPage() {
     this.isLoading = true;
     if (!this.nextPage) return;
-    this.postService.getPosts(this.currPage + 1, 4).pipe(
-      finalize(() => this.isLoading = false)
-    ).subscribe((res) => {
-      if (res.message === 'ok') {
-        const convert = res.data.meta;
-        this.posts = res.data.posts;
-        this.currPage = +convert.currPage;
-        this.nextPage = convert.nextPage;
-        this.prevPage = convert.prevPage;
-      }
-    });
+    if(this.navLink === 'all') {
+      this.postService.getPosts(this.currPage + 1, this.limitPage).pipe(
+        finalize(() => this.isLoading = false)
+      ).subscribe((res) => {
+        if (res.message === 'ok') {
+          const convert = res.data.meta;
+          this.posts = res.data.posts;
+          this.currPage = +convert.currPage;
+          this.nextPage = convert.nextPage;
+          this.prevPage = convert.prevPage;
+        }
+      });
+    }else {
+      this.postService.getPostsCategory(this.currPage + 1, this.limitPage, this.navLink).pipe(
+        finalize(() => this.isLoading = false)
+      ).subscribe((res) => {
+        if (res.message === 'ok') {
+          const convert = res.data.meta;
+          this.posts = res.data.posts;
+          this.currPage = +convert.currPage;
+          this.nextPage = convert.nextPage;
+          this.prevPage = convert.prevPage;
+        }
+      });
+    }
     window.scrollTo(0,100);
   }
 
   fetchPost() {
     this.isLoading = true;
-    this.postService.getPosts(this.currPage, 4).pipe(
+    this.postService.getPosts(1, this.limitPage).pipe(
       finalize(() => this.isLoading = false)
     ).subscribe((res) => {
       if (res.message === 'ok') {
         const convert = res.data.meta;
         this.nextPage = convert.nextPage;
         this.prevPage = convert.prevPage;
+        this.currPage = convert.currPage;
         this.posts = res.data.posts;
       }
     });

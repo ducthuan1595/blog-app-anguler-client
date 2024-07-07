@@ -12,6 +12,7 @@ import { UserType } from '../models/user.model';
 import { CommentType, CreateCommentType, GetCommentType, CommentAllType } from '../models/comment.model';
 import { covertDateToDMY } from '../util/formatDate';
 import { LikeService } from '../services/like.service';
+import { ViewService } from '../services/view.service';
 
 @Component({
   selector: 'app-post-detail',
@@ -27,11 +28,13 @@ export class PostDetailComponent implements OnInit, OnChanges {
   prevPage: boolean;
   user: UserType = null;
   commentValue = '';
+  commentValueChild = '';
   commentId: string = '';
   commentLength = 0;
   liked = 0;
   isLoading = false;
   avatar: SafeUrl;
+  views = 0;
 
   isMore = false;
   currentCommentPage = 1;
@@ -39,7 +42,16 @@ export class PostDetailComponent implements OnInit, OnChanges {
   private blogDetailSubject = new BehaviorSubject<any>(null);
   blogDetailObservable$ = this.blogDetailSubject.asObservable();
 
-  constructor(private postService: PostService, private router: Router, private route: ActivatedRoute, private commentService: CommentService, private authService: AuthService, private likedService: LikeService, private sanitizer: DomSanitizer) {}
+  constructor(
+    private postService: PostService, 
+    private router: Router, 
+    private route: ActivatedRoute, 
+    private commentService: CommentService, 
+    private authService: AuthService, 
+    private likedService: LikeService, 
+    private sanitizer: DomSanitizer,
+    private viewService: ViewService
+  ) {}
 
   ngOnInit(): void {
     this.isLoading = true
@@ -50,6 +62,13 @@ export class PostDetailComponent implements OnInit, OnChanges {
       this.isMoreComment = true;
       this.isMore = false;
       this.fetchDate(params.get('id'), params.get('categoryId'));
+
+      this.viewService.getTotalView(params.get('id')).subscribe(res => {
+        this.views = res.data
+      });
+
+      this.viewService.calcView(params.get('id')).subscribe();
+
     });
     this.authService.getLoggedUser().subscribe((res) => {
       if(res) {
@@ -185,7 +204,7 @@ export class PostDetailComponent implements OnInit, OnChanges {
       data = {
         blogId: this.post._id,
         userId: this.user._id,
-        content: this.commentValue,
+        content: this.commentValueChild,
         parentCommentId
       }
     }else {
@@ -198,13 +217,13 @@ export class PostDetailComponent implements OnInit, OnChanges {
 
     this.commentService.createComment(data).subscribe(res => {
       if(res.message === 'ok') {
-        if(!parentCommentId) {
-          return this.comments.unshift(res.data);
-        }
-        this.comments[index].replies.push(res.data);
+        this.comments = [];
+        this.getComment()
+        
       }
     })
     this.commentValue = '';
+    this.commentValueChild = '';
     this.commentId = ''
   }
 

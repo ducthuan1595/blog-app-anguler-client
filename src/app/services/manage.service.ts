@@ -51,9 +51,6 @@ export class ManageService {
 
   removeCategory(id: string) {
     return this.http.delete<{ message: string }>(
-      `${this.URL}/v1/api/delete`, {
-        body: id
-      }
-    );
+      `${this.URL}/v1/api/category?categoryId=${id}`);
   }
 }

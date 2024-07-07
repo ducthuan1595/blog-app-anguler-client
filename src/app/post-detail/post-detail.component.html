@@ -29,7 +29,7 @@
       <div class="footer-post__first">
         <div class="blog-review">
           <i class="fa-regular fa-eye"></i>
-          <span>2</span>
+          <span>{{views}}</span>
         </div>
         <div class="blog-review">
           <i class="fa-regular fa-message"></i>
@@ -65,7 +65,7 @@
             </button>
           </p>
           <div class="" *ngIf="commentId === comment._id">
-            <input class="p-2 mb-4 w-100" placeholder="Write a comment..." [(ngModel)]="commentValue" (keyup.enter)="addComment(comment._id)" />
+            <input class="p-2 mb-4 w-100" placeholder="Write a comment..." name="comment-parent" [(ngModel)]="commentValueChild" (keyup.enter)="addComment(comment._id)" />
           </div>        
         </div>
       </div>
@@ -90,7 +90,7 @@
                     </button>
                   </p>
                   <div class="" *ngIf="commentId === item._id">
-                    <input class="p-2 mb-4 w-100" placeholder="Write a comment..." [(ngModel)]="commentValue" (keyup.enter)="addComment(comment._id, index)" />
+                    <input class="p-2 mb-4 w-100" placeholder="Write a comment..." name="comment-child" [(ngModel)]="commentValueChild" (keyup.enter)="addComment(comment._id, index)" />
                   </div>        
                 </div>
               </div>

@@ -15,7 +15,7 @@
         <th scope="row">{{ i + 1 }}</th>
         <td>{{ category.name }}</td>
         <td><img class="image-table" [src]="category.image.url" alt="" /></td>
-        <td>{{ formatDate(category.createdAt) }}</td>
+        <td>{{ formatDate(category.createdAt).date }}</td>
         <td>
           <button class="btn btn-warning m-2" (click)="onUpdate(category._id)">
             Edit</button

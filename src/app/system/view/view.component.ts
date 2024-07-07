@@ -9,6 +9,7 @@ import { CommentType } from '../../models/comment.model';
 import { LikeService } from '../../services/like.service';
 import { UserType } from '../../models/user.model';
 import { covertDateToDMY } from '../../util/formatDate';
+import { ViewService } from '../../services/view.service';
 
 @Component({
   selector: 'app-view',
@@ -20,15 +21,20 @@ export class ViewComponent implements OnInit {
   comments: CommentType[];
   commentLength = 0;
   likers: UserType[];
+  views = 0;
   isLoading = false;
 
-  constructor(private router: Router, private postService: PostService, private commentService: CommentService, private likedService: LikeService) {}
+  constructor(private router: Router, private postService: PostService, private commentService: CommentService, private viewService: ViewService) {}
 
   ngOnInit(): void {
     const data = history.state.data;    
     if(data) {
       console.log(data);
       this.post = data;
+
+      this.viewService.getTotalView(data._id).subscribe(res => {
+        this.views = res.data
+      })
 
       this.commentService.getLengthComment(data._id).subscribe(res => {
         this.commentLength = res.data
